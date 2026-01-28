@@ -9,7 +9,11 @@ import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.SwingConstants;
+import javax.swing.JCheckBox;
 
 public class Login extends JFrame {
 
@@ -31,6 +35,10 @@ public class Login extends JFrame {
 	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_4;
 	private JLabel lblNewLabel_5;
+	private JCheckBox btnVer;
+	private JLabel lblNewLabel_6;
+	private char caracterDefecto;
+	private boolean passwordVisible = false; //queremos saber si esta mostrando o ocultando
 
 	/**
 	 * Launch the application.
@@ -91,7 +99,7 @@ public class Login extends JFrame {
 		
 		passwordField = new JPasswordField();
 		panelC.add(passwordField);
-		
+		caracterDefecto = passwordField.getEchoChar();
 		lblNewLabel_4 = new JLabel("");
 		panelC.add(lblNewLabel_4);
 		
@@ -117,6 +125,29 @@ public class Login extends JFrame {
 		
 		panelE = new JPanel();
 		contentPane.add(panelE, BorderLayout.EAST);
+		panelE.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		lblNewLabel_6 = new JLabel("");
+		panelE.add(lblNewLabel_6);
+		
+		//boton ver
+		btnVer = new JCheckBox("Ver contraseña");
+		btnVer.setHorizontalAlignment(SwingConstants.CENTER);
+		panelE.add(btnVer);
+		btnVer.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(passwordVisible){
+					passwordField.setEchoChar(caracterDefecto);
+					passwordVisible = false;
+				}else {
+					passwordField.setEchoChar((char)0);
+					passwordVisible = true;
+				}
+				
+			}
+			
+		});
 	}
 }
