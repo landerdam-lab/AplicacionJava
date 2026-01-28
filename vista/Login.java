@@ -6,17 +6,31 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import javax.swing.SwingConstants;
 
 public class Login extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JLabel lblLogin;
-	private JLabel lblPassword;
+	private JPanel panelC;
+	private JPanel panelN;
+	private JPanel panelS;
+	private JPanel panelE;
+	private JLabel lblIniciarsesion;
 	private JLabel lblUsuario;
 	private JTextField textUsuario;
-	private JTextField textPass;
-	private JButton btnNewButton;
+	private JLabel lblPassword;
+	private JPasswordField passwordField;
+	private JButton btnIniciar;
+	private JLabel lblNewLabel;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_3;
+	private JLabel lblNewLabel_4;
+	private JLabel lblNewLabel_5;
 
 	/**
 	 * Launch the application.
@@ -43,34 +57,66 @@ public class Login extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		lblLogin = new JLabel("INICIAR SESION");
-		lblLogin.setFont(new Font("Arial", Font.BOLD, 12));
-		lblLogin.setBounds(162, 11, 99, 28);
-		contentPane.add(lblLogin);
+		panelC = new JPanel();
+		contentPane.add(panelC, BorderLayout.CENTER);
+		panelC.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		lblNewLabel = new JLabel("");
+		panelC.add(lblNewLabel);
+		
+		lblNewLabel_1 = new JLabel("");
+		panelC.add(lblNewLabel_1);
 		
 		lblUsuario = new JLabel("Usuario:");
-		lblUsuario.setBounds(101, 67, 46, 14);
-		contentPane.add(lblUsuario);
-		
-		lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(101, 127, 64, 14);
-		contentPane.add(lblPassword);
+		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsuario.setFont(new Font("Arial", Font.BOLD, 13));
+		panelC.add(lblUsuario);
 		
 		textUsuario = new JTextField();
-		textUsuario.setBounds(162, 64, 99, 20);
-		contentPane.add(textUsuario);
+		panelC.add(textUsuario);
 		textUsuario.setColumns(10);
 		
-		textPass = new JTextField();
-		textPass.setBounds(162, 124, 99, 20);
-		contentPane.add(textPass);
-		textPass.setColumns(10);
+		lblNewLabel_2 = new JLabel("");
+		panelC.add(lblNewLabel_2);
 		
-		btnNewButton = new JButton("INGRESAR");
-		btnNewButton.setBounds(162, 188, 99, 23);
-		contentPane.add(btnNewButton);
+		lblNewLabel_3 = new JLabel("");
+		panelC.add(lblNewLabel_3);
+		
+		lblPassword = new JLabel("Password:");
+		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPassword.setFont(new Font("Arial", Font.BOLD, 13));
+		panelC.add(lblPassword);
+		
+		passwordField = new JPasswordField();
+		panelC.add(passwordField);
+		
+		lblNewLabel_4 = new JLabel("");
+		panelC.add(lblNewLabel_4);
+		
+		lblNewLabel_5 = new JLabel("");
+		panelC.add(lblNewLabel_5);
+		
+		panelN = new JPanel();
+		contentPane.add(panelN, BorderLayout.NORTH);
+		
+		lblIniciarsesion = new JLabel("INICIAR SESION");
+		lblIniciarsesion.setFont(new Font("Arial", Font.BOLD, 20));
+		panelN.add(lblIniciarsesion);
+		
+		panelS = new JPanel();
+		contentPane.add(panelS, BorderLayout.SOUTH);
+		
+		btnIniciar = new JButton("INGRESAR");
+		btnIniciar.setFont(new Font("Arial", Font.BOLD, 16));
+		panelS.add(btnIniciar);
+		
+		JPanel panelW = new JPanel();
+		contentPane.add(panelW, BorderLayout.WEST);
+		
+		panelE = new JPanel();
+		contentPane.add(panelE, BorderLayout.EAST);
 
 	}
 }
