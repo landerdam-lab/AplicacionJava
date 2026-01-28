@@ -6,5 +6,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="controlador"/>
+	<classpathentry kind="src" path="modelo"/>
+	<classpathentry kind="src" path="vista"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
