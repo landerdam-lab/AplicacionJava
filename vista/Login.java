@@ -25,10 +25,10 @@ public class Login extends JFrame {
 	private JPanel panelE;
 	private JLabel lblIniciarsesion;
 	private JLabel lblUsuario;
-	private JTextField textUsuario;
+	private JTextField txtUsuario;
 	private JLabel lblPassword;
-	private JPasswordField passwordField;
-	private JButton btnIniciar;
+	private JPasswordField txtPassword;
+	private JButton btnIngresar;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
@@ -82,9 +82,9 @@ public class Login extends JFrame {
 		lblUsuario.setFont(new Font("Arial", Font.BOLD, 13));
 		panelC.add(lblUsuario);
 		
-		textUsuario = new JTextField();
-		panelC.add(textUsuario);
-		textUsuario.setColumns(10);
+		txtUsuario = new JTextField();
+		panelC.add(txtUsuario);
+		txtUsuario.setColumns(10);
 		
 		lblNewLabel_2 = new JLabel("");
 		panelC.add(lblNewLabel_2);
@@ -97,9 +97,9 @@ public class Login extends JFrame {
 		lblPassword.setFont(new Font("Arial", Font.BOLD, 13));
 		panelC.add(lblPassword);
 		
-		passwordField = new JPasswordField();
-		panelC.add(passwordField);
-		caracterDefecto = passwordField.getEchoChar();
+		txtPassword = new JPasswordField();
+		panelC.add(txtPassword);
+		caracterDefecto = txtPassword.getEchoChar();
 		lblNewLabel_4 = new JLabel("");
 		panelC.add(lblNewLabel_4);
 		
@@ -116,9 +116,9 @@ public class Login extends JFrame {
 		panelS = new JPanel();
 		contentPane.add(panelS, BorderLayout.SOUTH);
 		
-		btnIniciar = new JButton("INGRESAR");
-		btnIniciar.setFont(new Font("Arial", Font.BOLD, 16));
-		panelS.add(btnIniciar);
+		btnIngresar = new JButton("INGRESAR");
+		btnIngresar.setFont(new Font("Arial", Font.BOLD, 16));
+		panelS.add(btnIngresar);
 		
 		JPanel panelW = new JPanel();
 		contentPane.add(panelW, BorderLayout.WEST);
@@ -139,10 +139,10 @@ public class Login extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(passwordVisible){
-					passwordField.setEchoChar(caracterDefecto);
+					txtPassword.setEchoChar(caracterDefecto);
 					passwordVisible = false;
 				}else {
-					passwordField.setEchoChar((char)0);
+					txtPassword.setEchoChar((char)0);
 					passwordVisible = true;
 				}
 				
