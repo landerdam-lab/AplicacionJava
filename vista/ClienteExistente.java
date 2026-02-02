@@ -1,5 +1,3 @@
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -8,8 +6,8 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
-import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
+import java.awt.Font;
 
 public class ClienteExistente extends JFrame {
 
@@ -20,18 +18,7 @@ public class ClienteExistente extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ClienteExistente frame = new ClienteExistente();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.
@@ -45,8 +32,13 @@ public class ClienteExistente extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(3, 0, 0, 0));
 		
-		JLabel lblNewLabel = new JLabel("");
-		contentPane.add(lblNewLabel);
+		JPanel panel_2 = new JPanel();
+		contentPane.add(panel_2);
+		panel_2.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel = new JLabel("Corrreo Usuario:");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		panel_2.add(lblNewLabel, BorderLayout.SOUTH);
 		
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1);
@@ -65,5 +57,4 @@ public class ClienteExistente extends JFrame {
 		panel.add(btnNewButton);
 
 	}
-
 }
