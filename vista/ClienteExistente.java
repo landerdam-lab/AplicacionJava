@@ -13,7 +13,7 @@ public class ClienteExistente extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField txtComprobarUsuario;
 
 	/**
 	 * Launch the application.
@@ -24,6 +24,7 @@ public class ClienteExistente extends JFrame {
 	 * Create the frame.
 	 */
 	public ClienteExistente() {
+		setTitle("ClienteExistente");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -44,17 +45,17 @@ public class ClienteExistente extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(74, 11, 296, 52);
-		textField.setColumns(10);
-		panel_1.add(textField);
+		txtComprobarUsuario = new JTextField();
+		txtComprobarUsuario.setBounds(74, 11, 296, 52);
+		txtComprobarUsuario.setColumns(10);
+		panel_1.add(txtComprobarUsuario);
 		
 		JPanel panel = new JPanel();
 		contentPane.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JButton btnNewButton = new JButton("New button");
-		panel.add(btnNewButton);
+		JButton btnComprobarUsuario = new JButton("COMPROBAR");
+		panel.add(btnComprobarUsuario);
 
 	}
 }
