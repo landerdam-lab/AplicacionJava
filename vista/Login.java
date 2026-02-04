@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.BorderLayout;
@@ -39,6 +40,7 @@ public class Login extends JFrame {
 	private JLabel lblNewLabel_6;
 	private char caracterDefecto;
 	private boolean passwordVisible = false; //queremos saber si esta mostrando o ocultando
+	private EventosLogin eventosLogin;
 
 	/**
 	 * Launch the application.
@@ -149,5 +151,28 @@ public class Login extends JFrame {
 			}
 			
 		});
+		
+		eventosLogin= new EventosLogin(this);
 	}
+	
+	public void RegistrarEventos() {
+		btnIngresar.addActionListener(null);
+	}
+
+	public JButton getBtnIngresar() {
+		return btnIngresar;
+	}
+
+	public void setBtnIngresar(JButton btnIngresar) {
+		this.btnIngresar = btnIngresar;
+	}
+
+	public EventosLogin getEventosLogin() {
+		return eventosLogin;
+	}
+
+	public void setEventosLogin(EventosLogin eventosLogin) {
+		this.eventosLogin = eventosLogin;
+	}
+
 }

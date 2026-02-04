@@ -23,7 +23,7 @@ public class ClienteExistente extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ClienteExistente() {
+	public ClienteExistente(ClientesInicio clientesInicio) {
 		setTitle("ClienteExistente");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,4 +58,5 @@ public class ClienteExistente extends JFrame {
 		panel.add(btnComprobarUsuario);
 
 	}
+
 }

@@ -20,18 +20,6 @@ public class CompraComponentes extends JFrame {
     private JLabel lblPrecioTotal;
     private double precioTotal = 0.0;
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    CompraComponentes frame = new CompraComponentes();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     public CompraComponentes() {
         setTitle("Comprar Componentes");

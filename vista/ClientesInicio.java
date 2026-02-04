@@ -12,6 +12,9 @@ public class ClientesInicio extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private EventosClientesInicio eventosClientesInicio;
+	private JButton btnClienteExistente;
+	private JButton btnClienteNuevo;
 
 	/**
 	 * Launch the application.
@@ -20,8 +23,9 @@ public class ClientesInicio extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param login 
 	 */
-	public ClientesInicio() {
+	public ClientesInicio(Login login) {
 		setResizable(false);
 		setTitle("ClienteInicio");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,15 +39,33 @@ public class ClientesInicio extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new GridLayout(3, 1, 0, 0));
 		
-		JButton btnClienteExistente = new JButton("CLiente Existente");
+		btnClienteExistente = new JButton("CLiente Existente");
 		panel.add(btnClienteExistente);
 		
 		JLabel lblNewLabel = new JLabel("");
 		panel.add(lblNewLabel);
 		
-		JButton btnClienteNuevo = new JButton("Nuevo Cliente");
+		btnClienteNuevo = new JButton("Nuevo Cliente");
 		panel.add(btnClienteNuevo);
+		
+		eventosClientesInicio=new EventosClientesInicio(this);
 
+	}
+
+	public JButton getBtnClienteExistente() {
+		return btnClienteExistente;
+	}
+
+	public void setBtnClienteExistente(JButton btnClienteExistente) {
+		this.btnClienteExistente = btnClienteExistente;
+	}
+
+	public JButton getBtnClienteNuevo() {
+		return btnClienteNuevo;
+	}
+
+	public void setBtnClienteNuevo(JButton btnClienteNuevo) {
+		this.btnClienteNuevo = btnClienteNuevo;
 	}
 
 }
