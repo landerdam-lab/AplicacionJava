@@ -32,5 +32,5 @@ public class UsuarioDAO {
 			e.printStackTrace();
 		}
 	}
-
+	
 }

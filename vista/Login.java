@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
+import java.awt.Color;
 
 public class Login extends JFrame {
 
@@ -61,6 +62,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		setBackground(new Color(255, 0, 0));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -108,6 +110,7 @@ public class Login extends JFrame {
 		panelC.add(lblNewLabel_5);
 		
 		panelN = new JPanel();
+		panelN.setBackground(new Color(128, 137, 249));
 		contentPane.add(panelN, BorderLayout.NORTH);
 		
 		lblIniciarsesion = new JLabel("INICIAR SESION");
