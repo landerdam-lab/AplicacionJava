@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
+
 public class EventosClienteExistente implements ActionListener {
 
 	private ClienteExistente clienteExistente;
@@ -24,14 +25,16 @@ public class EventosClienteExistente implements ActionListener {
 				return;
 			}
 
-			boolean existe = clienteDao.loginCliente(correo);
+			Cliente clienteLogueado = clienteDao.loginCliente(correo);
 
-			if (existe) {
-				JOptionPane.showMessageDialog(clienteExistente, "¡Cliente encontrado! Acceso permitido.");
+			if (clienteLogueado != null) {
+
+				JOptionPane.showMessageDialog(clienteExistente, "¡Hola " + clienteLogueado.getNombre() + "! Acceso permitido.");
 				
-				clienteExistente.setVisible(false);
-				MenuCompras menucompras = new MenuCompras(clienteExistente);
-	            menucompras.setVisible(true);
+				clienteExistente.dispose();
+
+				MenuCompras menucompras = new MenuCompras(clienteLogueado);
+				menucompras.setVisible(true);
 				
 			} else {
 				JOptionPane.showMessageDialog(clienteExistente, "El correo no existe en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);

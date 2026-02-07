@@ -8,15 +8,14 @@ public class MenuCompras extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private Cliente clienteActual;
 
-	/**
-	 * Launch the application.
-	 */
-	/**
-	 * Create the frame.
-	 */
-	public MenuCompras(ClienteExistente clienteExistente ) {
-		setTitle("Menu Compras");
+	public MenuCompras(Cliente cliente) {
+		
+		this.clienteActual = cliente;
+		
+		setTitle("Menu Compras - Usuario: " + clienteActual.getNombre());
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 913, 578);
@@ -25,7 +24,7 @@ public class MenuCompras extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnConfiguraciones = new JButton("Comprar Configuracioens");
+		JButton btnConfiguraciones = new JButton("Comprar Configuraciones");
 		btnConfiguraciones.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnConfiguraciones.setAlignmentX(0.5f);
 		btnConfiguraciones.setBounds(294, 200, 309, 86);
@@ -42,9 +41,9 @@ public class MenuCompras extends JFrame {
 		btnCargar.setAlignmentX(0.5f);
 		btnCargar.setBounds(294, 333, 309, 86);
 		contentPane.add(btnCargar);
-
 	}
-
-
-
+	
+	public Cliente getClienteActual() {
+		return clienteActual;
+	}
 }

@@ -5,38 +5,42 @@ import java.sql.SQLException;
 
 public class ClienteDAO {
 
-	public boolean loginCliente(String correo) {
+	public Cliente loginCliente(String correo) {
+	    
+	    BaseDatos bd = new BaseDatos();
+	    Connection con = bd.getConn();
+	    Cliente clienteEncontrado = null; 
 
-		BaseDatos bd = new BaseDatos();
-		Connection con = bd.getConn();
+	    if (con == null) {
+	    	return null;
+	    }
 
-		if (con == null) {
-			return false;
-		}
+	    String sql = "SELECT * FROM CLIENTE WHERE email = ?";
 
-		String sql = "SELECT * FROM CLIENTE WHERE email = ?";
-		boolean emailEncontrado = false;
+	    try {
+	        PreparedStatement ps = con.prepareStatement(sql);
+	        ps.setString(1, correo);
 
-		try {
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1, correo);
+	        ResultSet rs = ps.executeQuery();
 
+	        if (rs.next()) {
+	            String nombre = rs.getString("NOMBRE");
+	            String emailDb = rs.getString("EMAIL");
+	            String dni = rs.getString("DNI");
+	            String telefono = rs.getString("TELEFONO");
+	            
+	            clienteEncontrado = new Cliente(nombre, emailDb, dni, telefono);
+	        }
 
-			ResultSet rs = ps.executeQuery();
+	        rs.close();
+	        ps.close();
+	        con.close(); 
 
-			if (rs.next()) {
-				emailEncontrado = true;
-			}
-
-			rs.close();
-			ps.close();
-			con.close(); 
-
-		} catch (SQLException e) {
-			System.out.println("Error en la consulta SQL: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return emailEncontrado;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return clienteEncontrado;
 	}
 
 	public boolean registrarCliente(String nombre, String email, String dni, String telefono) {
