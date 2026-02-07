@@ -4,9 +4,7 @@ import java.awt.event.ActionListener;
 public class EventosClientesInicio {
 
 	private ClientesInicio clientesInicio;
-	private ClienteExistente clienteExistente;
-	private ClientesRegistro clienteRegistro;
-
+	
 	public EventosClientesInicio(ClientesInicio clientesInicio) {
 
 		this.clientesInicio=clientesInicio;
