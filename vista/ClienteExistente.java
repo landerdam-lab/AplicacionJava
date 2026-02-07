@@ -18,7 +18,7 @@ public class ClienteExistente extends JFrame {
 	private JButton btnComprobarUsuario;
 
 	// Constructor
-	public ClienteExistente(ClientesInicio clientesInicio) {
+	public ClienteExistente() {
 		setTitle("ClienteExistente");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

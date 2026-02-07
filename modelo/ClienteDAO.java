@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ClienteDAO {
-	
+
 	public boolean loginCliente(String correo) {
 
 		BaseDatos bd = new BaseDatos();
@@ -37,5 +37,37 @@ public class ClienteDAO {
 			e.printStackTrace();
 		}
 		return emailEncontrado;
+	}
+
+	public boolean registrarCliente(String nombre, String email, String dni, String telefono) {
+
+		BaseDatos bd = new BaseDatos();
+		Connection con = bd.getConn();
+
+		if (con == null) {
+			return false;
+		}
+
+		String sql = "INSERT INTO CLIENTE (NOMBRE, EMAIL, DNI, TELEFONO) VALUES (?, ?, ?, ?)";
+
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+
+			ps.setString(1, nombre);
+			ps.setString(2, email);
+			ps.setString(3, dni);
+			ps.setString(4, telefono);
+
+			int filasAfectadas = ps.executeUpdate();
+
+			ps.close();
+			con.close();
+
+			return filasAfectadas > 0;
+
+		} catch (SQLException e) {
+			System.out.println("Error al registrar cliente: " + e.getMessage());
+			return false;
+		}
 	}
 }

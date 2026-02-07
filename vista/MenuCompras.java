@@ -15,7 +15,7 @@ public class MenuCompras extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MenuCompras(ClienteExistente clienteExistente) {
+	public MenuCompras(ClienteExistente clienteExistente ) {
 		setTitle("Menu Compras");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,6 +44,7 @@ public class MenuCompras extends JFrame {
 		contentPane.add(btnCargar);
 
 	}
+
 
 
 }

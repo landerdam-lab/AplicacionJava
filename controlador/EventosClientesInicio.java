@@ -15,7 +15,7 @@ public class EventosClientesInicio {
 			public void actionPerformed(ActionEvent e) {
 				clientesInicio.setVisible(false);
 
-				ClienteExistente existe = new ClienteExistente(clientesInicio);
+				ClienteExistente existe = new ClienteExistente();
 				existe.setVisible(true);
 			}
 		});
@@ -26,7 +26,7 @@ public class EventosClientesInicio {
 			public void actionPerformed(ActionEvent e) {
 				clientesInicio.setVisible(false);
 
-				ClientesRegistro existe = new ClientesRegistro(clientesInicio);
+				ClientesRegistro existe = new ClientesRegistro();
 				existe.setVisible(true);
 			}
 		});
