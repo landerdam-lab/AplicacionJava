@@ -15,28 +15,32 @@ public class EventosLogin implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        String usuario = login.getTxtUsuario().getText(); 
+        
+        String usuarioTexto = login.getTxtUsuario().getText(); 
         String password = new String(login.getTxtPassword().getPassword());
         
-        if(usuario.isEmpty() || password.isEmpty()) {
+        if(usuarioTexto.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(login, "Por favor, rellena usuario y contraseña.");
             return;
         }
 
-        String nombreRecibido = dao.loginTrabajador(usuario, password);
+        Usuario usuarioLogueado = dao.loginUsuario(usuarioTexto, password);
 
-        if (nombreRecibido != null) {
+        if (usuarioLogueado != null) {
             
-            JOptionPane.showMessageDialog(login, "Bienvenido/a " + nombreRecibido);
+            JOptionPane.showMessageDialog(login, "Bienvenido " + usuarioLogueado.getNombre() + " " + usuarioLogueado.getApellido1());
             
-            login.setVisible(false);
+            login.dispose();
 
-            ClientesInicio inicio = new ClientesInicio(login);
+
+            ClientesInicio inicio = new ClientesInicio(usuarioLogueado);
             inicio.setVisible(true);
             
         } else {
-            JOptionPane.showMessageDialog(login, "Usuario o contraseña incorrectos", "Error de acceso", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(login, 
+                "Usuario o contraseña incorrectos", 
+                "Error de acceso", 
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 }

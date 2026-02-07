@@ -5,17 +5,15 @@ import java.sql.SQLException;
 
 public class UsuarioDAO {
 
-    public String loginTrabajador(String user, String pass) {
+    public Usuario loginUsuario(String user, String pass) {
         
         BaseDatos bd = new BaseDatos();
         Connection con = bd.getConn();
-        
-        if (con == null) {
-            return null;
-        }
+        Usuario usuarioEncontrado = null;
 
-        String sql = "SELECT nombre FROM TRABAJADOR WHERE usuario_trabajador = ? AND contraseña_trabajador = ?";
-        String nombreEncontrado = null;
+        if (con == null) return null;
+
+        String sql = "SELECT * FROM TRABAJADOR WHERE USUARIO_TRABAJADOR = ? AND CONTRASEÑA_TRABAJADOR = ?";
 
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -25,7 +23,15 @@ public class UsuarioDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                nombreEncontrado = rs.getString("nombre");
+                usuarioEncontrado = new Usuario(
+                    rs.getString("USUARIO_TRABAJADOR"),
+                    rs.getString("NOMBRE"),
+                    rs.getString("APELLIDO1"),
+                    rs.getString("APELLIDO2"),
+                    rs.getString("NIF"),
+                    rs.getString("CONTRASEÑA_TRABAJADOR"),
+                    rs.getInt("ES_ADMIN")
+                );
             }
 
             rs.close();
@@ -33,10 +39,9 @@ public class UsuarioDAO {
             con.close(); 
 
         } catch (SQLException e) {
-            System.out.println("Error en la consulta SQL: " + e.getMessage());
             e.printStackTrace();
         }
 
-        return nombreEncontrado;
+        return usuarioEncontrado;
     }
 }

@@ -1,13 +1,14 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class EventosClientesInicio {
 
 	private ClientesInicio clientesInicio;
 	
 	public EventosClientesInicio(ClientesInicio clientesInicio) {
 
-		this.clientesInicio=clientesInicio;
+		this.clientesInicio = clientesInicio;
 
 		this.clientesInicio.getBtnClienteExistente().addActionListener(new ActionListener() {
 
@@ -15,8 +16,8 @@ public class EventosClientesInicio {
 			public void actionPerformed(ActionEvent e) {
 				clientesInicio.setVisible(false);
 
-				ClienteExistente existe = new ClienteExistente();
-				existe.setVisible(true);
+				ClienteExistente ventanaLoginCliente = new ClienteExistente();
+				ventanaLoginCliente.setVisible(true);
 			}
 		});
 		
@@ -26,10 +27,9 @@ public class EventosClientesInicio {
 			public void actionPerformed(ActionEvent e) {
 				clientesInicio.setVisible(false);
 
-				ClientesRegistro existe = new ClientesRegistro();
-				existe.setVisible(true);
+				ClientesRegistro ventanaRegistro = new ClientesRegistro(clientesInicio);
+				ventanaRegistro.setVisible(true);
 			}
 		});
 	}
-
 }

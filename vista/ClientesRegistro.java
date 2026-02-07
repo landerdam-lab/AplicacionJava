@@ -23,7 +23,7 @@ public class ClientesRegistro extends JFrame {
 	private EventosClienteRegistro eventosClienteRegistro;
 
 
-	public ClientesRegistro() {
+	public ClientesRegistro(ClientesInicio clientesInicio) {
 		setTitle("Registro de Cliente");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Mejor DISPOSE que EXIT para no cerrar toda la app
 		setBounds(100, 100, 450, 300);
