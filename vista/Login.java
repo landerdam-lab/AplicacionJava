@@ -41,7 +41,7 @@ public class Login extends JFrame {
     private char caracterDefecto;
     private boolean passwordVisible = false;
     
-    private EventosLogin eventosLogin; // Referencia al controlador
+    private EventosLogin eventosLogin;
 
     /**
      * Launch the application.
