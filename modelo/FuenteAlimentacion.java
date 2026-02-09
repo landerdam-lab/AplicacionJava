@@ -6,9 +6,9 @@ public class FuenteAlimentacion extends Componente{
 	protected String potencia;
 	
 	
-	public FuenteAlimentacion(String descripcion, String nombre, Image imagen, int stock,
-			String certificacionEnergetica, String potencia) {
-		super(descripcion, nombre, imagen, stock);
+	public FuenteAlimentacion(int idComponente, String descripcion, String nombre, Image imagen, int stock, int idMarca,
+			double precioVenta, String certificacionEnergetica, String potencia) {
+		super(idComponente, descripcion, nombre, imagen, stock, idMarca, precioVenta);
 		this.certificacionEnergetica = certificacionEnergetica;
 		this.potencia = potencia;
 	}
@@ -32,6 +32,8 @@ public class FuenteAlimentacion extends Componente{
 	public void setPotencia(String potencia) {
 		this.potencia = potencia;
 	}
+	
+	
 	
 	
 	

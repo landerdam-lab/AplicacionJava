@@ -4,8 +4,9 @@ public class TarjetaGrafica extends Componente{
 
 	protected String vram;
 
-	public TarjetaGrafica(String descripcion, String nombre, Image imagen, int stock, String vram) {
-		super(descripcion, nombre, imagen, stock);
+	public TarjetaGrafica(int idComponente, String descripcion, String nombre, Image imagen, int stock, int idMarca,
+			double precioVenta, String vram) {
+		super(idComponente, descripcion, nombre, imagen, stock, idMarca, precioVenta);
 		this.vram = vram;
 	}
 
@@ -16,7 +17,7 @@ public class TarjetaGrafica extends Componente{
 	public void setVram(String vram) {
 		this.vram = vram;
 	}
-	
+
 	
 	
 	

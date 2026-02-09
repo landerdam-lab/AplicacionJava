@@ -6,9 +6,9 @@ public class DiscoDuro extends Componente{
 	protected String capacidad;
 	
 	
-	public DiscoDuro(String descripcion, String nombre, Image imagen, int stock, String tipoAlmacenamiento,
-			String capacidad) {
-		super(descripcion, nombre, imagen, stock);
+	public DiscoDuro(int idComponente, String descripcion, String nombre, Image imagen, int stock, int idMarca,
+			double precioVenta, String tipoAlmacenamiento, String capacidad) {
+		super(idComponente, descripcion, nombre, imagen, stock, idMarca, precioVenta);
 		this.tipoAlmacenamiento = tipoAlmacenamiento;
 		this.capacidad = capacidad;
 	}
@@ -34,4 +34,5 @@ public class DiscoDuro extends Componente{
 	}
 	
 	
+
 }

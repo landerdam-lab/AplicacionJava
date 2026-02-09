@@ -6,8 +6,9 @@ public class Monitor extends Componente {
 	protected String medidas;
 	
 	
-	public Monitor(String descripcion, String nombre, Image imagen, int stock, String hz, String medidas) {
-		super(descripcion, nombre, imagen, stock);
+	public Monitor(int idComponente, String descripcion, String nombre, Image imagen, int stock, int idMarca,
+			double precioVenta, String hz, String medidas) {
+		super(idComponente, descripcion, nombre, imagen, stock, idMarca, precioVenta);
 		this.hz = hz;
 		this.medidas = medidas;
 	}
@@ -31,6 +32,7 @@ public class Monitor extends Componente {
 	public void setMedidas(String medidas) {
 		this.medidas = medidas;
 	}
+	
 	
 	
 }

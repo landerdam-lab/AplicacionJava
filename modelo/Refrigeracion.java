@@ -6,8 +6,9 @@ public class Refrigeracion extends Componente{
 	protected String tamanio;
 	
 	
-	public Refrigeracion(String descripcion, String nombre, Image imagen, int stock, String tipo, String tamanio) {
-		super(descripcion, nombre, imagen, stock);
+	public Refrigeracion(int idComponente, String descripcion, String nombre, Image imagen, int stock, int idMarca,
+			double precioVenta, String tipo, String tamanio) {
+		super(idComponente, descripcion, nombre, imagen, stock, idMarca, precioVenta);
 		this.tipo = tipo;
 		this.tamanio = tamanio;
 	}
@@ -31,6 +32,9 @@ public class Refrigeracion extends Componente{
 	public void setTamanio(String tamanio) {
 		this.tamanio = tamanio;
 	}
+	
+	
+	
 	
 	
 	

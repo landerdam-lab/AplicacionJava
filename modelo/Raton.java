@@ -5,8 +5,9 @@ public class Raton extends Componente{
 	protected String dpi;
 	protected String tipo;
 	
-	public Raton(String descripcion, String nombre, Image imagen, int stock, String dpi, String tipo) {
-		super(descripcion, nombre, imagen, stock);
+	public Raton(int idComponente, String descripcion, String nombre, Image imagen, int stock, int idMarca,
+			double precioVenta, String dpi, String tipo) {
+		super(idComponente, descripcion, nombre, imagen, stock, idMarca, precioVenta);
 		this.dpi = dpi;
 		this.tipo = tipo;
 	}
@@ -26,6 +27,7 @@ public class Raton extends Componente{
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
+	
 	
 	
 	

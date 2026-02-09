@@ -2,17 +2,32 @@ import java.awt.Image;
 
 public class Componente {
 
+	private int idComponente;
 	private String descripcion;
 	private String nombre;
 	private Image imagen;
 	private int stock;
+	private int idMarca;
+	protected double precioVenta;
 	
-	public Componente(String descripcion, String nombre, Image imagen, int stock) {
+	public Componente(int idComponente, String descripcion, String nombre, Image imagen, int stock, int idMarca,
+			double precioVenta) {
 		super();
+		this.idComponente = idComponente;
 		this.descripcion = descripcion;
 		this.nombre = nombre;
 		this.imagen = imagen;
 		this.stock = stock;
+		this.idMarca = idMarca;
+		this.precioVenta = precioVenta;
+	}
+
+	public int getIdComponente() {
+		return idComponente;
+	}
+
+	public void setIdComponente(int idComponente) {
+		this.idComponente = idComponente;
 	}
 
 	public String getDescripcion() {
@@ -45,6 +60,22 @@ public class Componente {
 
 	public void setStock(int stock) {
 		this.stock = stock;
+	}
+
+	public int getIdMarca() {
+		return idMarca;
+	}
+
+	public void setIdMarca(int idMarca) {
+		this.idMarca = idMarca;
+	}
+
+	public double getPrecioVenta() {
+		return precioVenta;
+	}
+
+	public void setPrecioVenta(double precioVenta) {
+		this.precioVenta = precioVenta;
 	}
 	
 	

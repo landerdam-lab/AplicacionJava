@@ -6,8 +6,9 @@ public class PlacaBase extends Componente {
 	protected String factorForma;
 	
 	
-	public PlacaBase(String descripcion, String nombre, Image imagen, int stock, String socket, String factorForma) {
-		super(descripcion, nombre, imagen, stock);
+	public PlacaBase(int idComponente, String descripcion, String nombre, Image imagen, int stock, int idMarca,
+			double precioVenta, String socket, String factorForma) {
+		super(idComponente, descripcion, nombre, imagen, stock, idMarca, precioVenta);
 		this.socket = socket;
 		this.factorForma = factorForma;
 	}
@@ -31,6 +32,8 @@ public class PlacaBase extends Componente {
 	public void setFactorForma(String factorForma) {
 		this.factorForma = factorForma;
 	}
+	
+	
 	
 	
 }

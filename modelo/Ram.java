@@ -6,9 +6,9 @@ public class Ram extends Componente {
 	protected String frecuencia;
 	protected String capacidad;
 	
-	public Ram(String descripcion, String nombre, Image imagen, int stock, String tipo, String frecuencia,
-			String capacidad) {
-		super(descripcion, nombre, imagen, stock);
+	public Ram(int idComponente, String descripcion, String nombre, Image imagen, int stock, int idMarca,
+			double precioVenta, String tipo, String frecuencia, String capacidad) {
+		super(idComponente, descripcion, nombre, imagen, stock, idMarca, precioVenta);
 		this.tipo = tipo;
 		this.frecuencia = frecuencia;
 		this.capacidad = capacidad;
@@ -37,6 +37,9 @@ public class Ram extends Componente {
 	public void setCapacidad(String capacidad) {
 		this.capacidad = capacidad;
 	}
+	
+	
+	
 	
 	
 }
