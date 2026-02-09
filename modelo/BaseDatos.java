@@ -3,27 +3,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-<<<<<<< HEAD
-
 
 public class BaseDatos {
 	
 	Connection conn = null;
 	Statement stmt = null;
 	String DB_URL = "jdbc:oracle:thin:@192.168.0.72:1521:ORCLCDB";
-	String USER = "tienda_empleado_dos";
-	String PASS = "Almi12345";
-	
-=======
-public class BaseDatos {
-
-	Connection conn = null;
-	Statement stmt = null;
-	String DB_URL = "jdbc:oracle:thin:@10.58.41.147:1521:ORCLCDB";
 	String USER = "tienda_informatica";
 	String PASS = "Almi12345";
+	
 
->>>>>>> a0a08dfa53179dedf95e21a9eb08d9aa28190823
 	public BaseDatos () {
 		
 		try {
@@ -43,8 +32,6 @@ public class BaseDatos {
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	public Connection getConn() {
 		return conn;
 	}
@@ -81,5 +68,4 @@ public class BaseDatos {
 		return PASS;
 	}
 
->>>>>>> a0a08dfa53179dedf95e21a9eb08d9aa28190823
 }

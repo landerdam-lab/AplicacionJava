@@ -5,10 +5,6 @@ import java.sql.SQLException;
 
 public class UsuarioDAO {
 
-<<<<<<< HEAD
-	
-}
-=======
     public Usuario loginUsuario(String user, String pass) {
         
         BaseDatos bd = new BaseDatos();
@@ -49,4 +45,3 @@ public class UsuarioDAO {
         return usuarioEncontrado;
     }
 }
->>>>>>> a0a08dfa53179dedf95e21a9eb08d9aa28190823

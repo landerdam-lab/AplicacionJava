@@ -1,1 +1,4 @@
-/Usuario.class
+/Cliente.class
+/ClienteDAO.class
+/EventosClienteExistente.class
+/EventosClienteRegistro.class
