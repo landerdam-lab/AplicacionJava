@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
 import java.util.List;
 import java.awt.Color;
+import java.awt.event.ActionListener;
 
 
 public class MisPedidos extends JFrame {
@@ -33,32 +34,36 @@ public class MisPedidos extends JFrame {
         lblTitulo.setBounds(20, 11, 300, 30);
         contentPane.add(lblTitulo);
         
-        // --- TABLA ---
+        // Tabla
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setBounds(20, 50, 740, 300);
         contentPane.add(scrollPane);
         
         tablaPedidos = new JTable();
-        // Modelo: Columnas no editables
         modeloTabla = new DefaultTableModel(
             new Object[][] {},
             new String[] { "ID Pedido", "Fecha", "Tipo", "Total (€)" }
         ) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+            public boolean isCellEditable(int row, int column) { return false; }
         };
         tablaPedidos.setModel(modeloTabla);
         scrollPane.setViewportView(tablaPedidos);
         
-        // --- BOTONES ---
-        JButton btnEliminar = new JButton("ELIMINAR / CANCELAR");
+        // BOTÓN BORRAR
+        JButton btnEliminar = new JButton("ELIMINAR");
         btnEliminar.setForeground(Color.WHITE);
         btnEliminar.setBackground(Color.RED);
-        btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btnEliminar.setBounds(560, 370, 200, 40);
-        btnEliminar.addActionListener(e -> eliminarPedidoSeleccionado());
+        btnEliminar.setBounds(600, 370, 160, 40);
+        btnEliminar.addActionListener(e -> eliminarPedido());
         contentPane.add(btnEliminar);
+
+        // BOTÓN EDITAR (NUEVO)
+        JButton btnEditar = new JButton("EDITAR PEDIDO");
+        btnEditar.setForeground(Color.BLACK);
+        btnEditar.setBackground(Color.ORANGE);
+        btnEditar.setBounds(430, 370, 160, 40);
+        btnEditar.addActionListener(e -> editarPedido());
+        contentPane.add(btnEditar);
         
         JButton btnVolver = new JButton("Volver al Menú");
         btnVolver.setBounds(20, 370, 150, 40);
@@ -68,16 +73,12 @@ public class MisPedidos extends JFrame {
         });
         contentPane.add(btnVolver);
         
-        // Cargar datos al iniciar
         cargarTabla();
     }
     
     private void cargarTabla() {
-        // Limpiamos la tabla
         modeloTabla.setRowCount(0);
-        
         List<Pedido> lista = pedidoDAO.listarPedidos(clienteActual.getEmail());
-        
         for (Pedido p : lista) {
             modeloTabla.addRow(new Object[] {
                 p.getIdPedido(),
@@ -88,26 +89,55 @@ public class MisPedidos extends JFrame {
         }
     }
     
-    private void eliminarPedidoSeleccionado() {
+    // Acción EDITAR
+    private void editarPedido() {
         int fila = tablaPedidos.getSelectedRow();
         if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Selecciona un pedido de la tabla para eliminarlo.");
+            JOptionPane.showMessageDialog(this, "Selecciona un pedido para editar.");
             return;
         }
         
+        // Aviso al usuario
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Para editar el pedido, se eliminará el actual y se abrirá el carrito con tus productos.\n¿Continuar?",
+            "Editar Pedido", JOptionPane.YES_NO_OPTION);
+            
+        if (confirm == JOptionPane.YES_OPTION) {
+            int idPedido = (int) modeloTabla.getValueAt(fila, 0);
+            
+            // 1. Recuperamos los productos del pedido viejo
+            List<LineaPedido> productos = pedidoDAO.recuperarDetallesPedido(idPedido);
+            
+            // 2. Borramos el pedido viejo (esto devuelve el stock a la tienda)
+            boolean borrado = pedidoDAO.eliminarPedido(idPedido);
+            
+            if (borrado) {
+                this.dispose();
+                // 3. Abrimos la tienda cargando esos productos
+                CompraComponentes tiendaEdicion = new CompraComponentes(clienteActual, productos);
+                tiendaEdicion.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al preparar la edición.");
+            }
+        }
+    }
+    
+    // Acción ELIMINAR
+    private void eliminarPedido() {
+        int fila = tablaPedidos.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un pedido para eliminar.");
+            return;
+        }
         int idPedido = (int) modeloTabla.getValueAt(fila, 0);
         
-        int confirm = JOptionPane.showConfirmDialog(this, 
-                "¿Seguro que quieres borrar el pedido " + idPedido + "?\nEl stock será devuelto.",
-                "Confirmar Borrado", JOptionPane.YES_NO_OPTION);
-        
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Borrar pedido " + idPedido + "? El stock se devolverá.", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            boolean exito = pedidoDAO.eliminarPedido(idPedido);
-            if (exito) {
-                JOptionPane.showMessageDialog(this, "Pedido eliminado correctamente.");
-                cargarTabla(); // Refrescamos la tabla
+            if (pedidoDAO.eliminarPedido(idPedido)) {
+                JOptionPane.showMessageDialog(this, "Pedido eliminado.");
+                cargarTabla();
             } else {
-                JOptionPane.showMessageDialog(this, "Error al eliminar el pedido.");
+                JOptionPane.showMessageDialog(this, "Error al eliminar.");
             }
         }
     }

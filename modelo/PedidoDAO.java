@@ -169,8 +169,34 @@ public class PedidoDAO {
     }
     public List<LineaPedido> recuperarDetallesPedido(int idPedido) {
         List<LineaPedido> detalles = new ArrayList<>();
-        // SQL para sacar ID_COMPONENTE, CANTIDAD y PRECIO de PEDIDO_COMPONENTE
-        // ...
+        BaseDatos bd = new BaseDatos();
+        Connection con = bd.getConn();
+        
+        if (con == null) return detalles;
+        
+        // Consultamos la tabla intermedia PEDIDO_COMPONENTE
+        String sql = "SELECT ID_COMPONENTE, CANTIDAD, PRECIO_UNITARIO FROM PEDIDO_COMPONENTE WHERE ID_PEDIDO = ?";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idPedido);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                // Creamos el objeto LineaPedido con lo que había en la base de datos
+                LineaPedido linea = new LineaPedido(
+                    rs.getInt("ID_COMPONENTE"),
+                    rs.getInt("CANTIDAD"),
+                    rs.getDouble("PRECIO_UNITARIO")
+                );
+                detalles.add(linea);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return detalles;
     }
 }
