@@ -1,33 +1,30 @@
-import java.awt.EventQueue;
-
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
 
 public class ClientesInicio extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	
 	private EventosClientesInicio eventosClientesInicio;
+	
 	private JButton btnClienteExistente;
 	private JButton btnClienteNuevo;
-
-	/**
-	 * Launch the application.
-	 */
 	
-
-	/**
-	 * Create the frame.
-	 * @param login 
-	 */
-	public ClientesInicio(Login login) {
+	private Usuario usuarioActual;
+	
+	public ClientesInicio(Usuario usuario) {
+		
+		this.usuarioActual = usuario;
+		
 		setResizable(false);
-		setTitle("ClienteInicio");
+		setTitle("Inicio - Atendido por: " + usuario.getNombre());
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -39,7 +36,7 @@ public class ClientesInicio extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new GridLayout(3, 1, 0, 0));
 		
-		btnClienteExistente = new JButton("CLiente Existente");
+		btnClienteExistente = new JButton("Cliente Existente");
 		panel.add(btnClienteExistente);
 		
 		JLabel lblNewLabel = new JLabel("");
@@ -48,8 +45,8 @@ public class ClientesInicio extends JFrame {
 		btnClienteNuevo = new JButton("Nuevo Cliente");
 		panel.add(btnClienteNuevo);
 		
-		eventosClientesInicio=new EventosClientesInicio(this);
-
+		eventosClientesInicio = new EventosClientesInicio(this);
+		
 	}
 
 	public JButton getBtnClienteExistente() {
@@ -67,5 +64,8 @@ public class ClientesInicio extends JFrame {
 	public void setBtnClienteNuevo(JButton btnClienteNuevo) {
 		this.btnClienteNuevo = btnClienteNuevo;
 	}
-
+	
+	public Usuario getUsuarioActual() {
+		return usuarioActual;
+	}
 }
