@@ -8,7 +8,7 @@ public class BaseDatos {
 	
 	Connection conn = null;
 	Statement stmt = null;
-	String DB_URL = "jdbc:oracle:thin:@192.168.0.72:1521:ORCLCDB";
+	String DB_URL = "jdbc:oracle:thin:@192.168.1.137:1521:ORCLCDB";
 	String USER = "tienda_informatica";
 	String PASS = "Almi12345";
 	
