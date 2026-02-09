@@ -101,4 +101,43 @@ public class ComponenteDAO {
         }
         return lista;
     }
+ // ... (resto de métodos anteriores) ...
+
+    // NUEVO: Buscar un componente solo por su ID (para recuperar pedidos)
+    public Componente obtenerComponentePorId(int id) {
+        BaseDatos bd = new BaseDatos();
+        Connection con = bd.getConn();
+        Componente comp = null;
+        
+        if (con == null) return null;
+
+        String sql = "SELECT * FROM COMPONENTE WHERE ID_COMPONENTE = ?";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Recuperamos los datos básicos
+                // Nota: Al recuperar por ID genérico perdemos los detalles específicos (RAM, CPU, etc.)
+                // pero es suficiente para añadirlo al carrito y calcular el precio.
+                comp = new Componente(
+                    rs.getInt("ID_COMPONENTE"),
+                    rs.getString("DESCRIPCION"),
+                    rs.getString("NOMBRE"),
+                    null, // imagen
+                    rs.getInt("STOCK"),
+                    rs.getInt("ID_MARCA"),
+                    rs.getDouble("PRECIO_VENTA")
+                );
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comp;
+    }
 }
