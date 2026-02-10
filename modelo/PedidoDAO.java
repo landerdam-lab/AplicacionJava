@@ -3,12 +3,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList; // Importante para las listas
+import java.util.ArrayList;
 import java.util.List;
 
 public class PedidoDAO {
 
-    // 1. REGISTRAR PEDIDO (El que ya tenías)
     public boolean registrarPedido(Cliente cliente, List<LineaPedido> carrito, double total, boolean conMontaje) {
         BaseDatos bd = new BaseDatos();
         Connection con = bd.getConn();
@@ -20,9 +19,8 @@ public class PedidoDAO {
         PreparedStatement psStock = null;
 
         try {
-            con.setAutoCommit(false); // Inicio transacción
+            con.setAutoCommit(false);
 
-            // A. Obtener nuevo ID
             int nuevoIdPedido = 1;
             String sqlId = "SELECT NVL(MAX(ID_PEDIDO), 0) + 1 FROM PEDIDO";
             PreparedStatement psId = con.prepareStatement(sqlId);
@@ -33,7 +31,6 @@ public class PedidoDAO {
             rsId.close();
             psId.close();
 
-            // B. Insertar Cabecera PEDIDO
             String sqlCabecera = "INSERT INTO PEDIDO (ID_PEDIDO, PRECIO_TOTAL, MONTAJE, FECHA_VENTA, ID_CLIENTE, USUARIO_TRABAJADOR) " +
                                  "VALUES (?, ?, ?, CURRENT_DATE, (SELECT ID_CLIENTE FROM CLIENTE WHERE EMAIL = ?), 'admin')";
             
@@ -44,7 +41,6 @@ public class PedidoDAO {
             psPedido.setString(4, cliente.getEmail());
             psPedido.executeUpdate();
 
-            // C. Insertar Detalles y Restar Stock
             String sqlDetalle = "INSERT INTO PEDIDO_COMPONENTE (ID_PEDIDO, ID_COMPONENTE, CANTIDAD, PRECIO_UNITARIO) VALUES (?, ?, ?, ?)";
             String sqlUpdateStock = "UPDATE COMPONENTE SET STOCK = STOCK - ? WHERE ID_COMPONENTE = ?";
             
@@ -52,14 +48,12 @@ public class PedidoDAO {
             psStock = con.prepareStatement(sqlUpdateStock);
 
             for (LineaPedido linea : carrito) {
-                // Detalle
                 psDetalle.setInt(1, nuevoIdPedido);
                 psDetalle.setInt(2, linea.getIdComponente());
                 psDetalle.setInt(3, linea.getCantidad());
                 psDetalle.setDouble(4, linea.getPrecioUnitario());
                 psDetalle.executeUpdate();
 
-                // Stock
                 psStock.setInt(1, linea.getCantidad());
                 psStock.setInt(2, linea.getIdComponente());
                 int filas = psStock.executeUpdate();
@@ -69,13 +63,13 @@ public class PedidoDAO {
                 }
             }
 
-            con.commit(); // Confirmar cambios
+            con.commit(); 
             return true;
 
         } catch (SQLException e) {
             e.printStackTrace();
             try {
-                con.rollback(); // Cancelar si hay error
+                con.rollback(); 
             } catch (SQLException ex) { ex.printStackTrace(); }
             return false;
         } finally {
@@ -88,7 +82,6 @@ public class PedidoDAO {
         }
     }
 
-    // 2. LISTAR PEDIDOS (NUEVO) - Para ver el historial en la tabla
     public List<Pedido> listarPedidos(String emailCliente) {
         List<Pedido> lista = new ArrayList<>();
         BaseDatos bd = new BaseDatos();
@@ -96,7 +89,6 @@ public class PedidoDAO {
         
         if (con == null) return lista;
         
-        // Buscamos pedidos del cliente por su email ordenados por fecha
         String sql = "SELECT * FROM PEDIDO WHERE ID_CLIENTE = (SELECT ID_CLIENTE FROM CLIENTE WHERE EMAIL = ?) ORDER BY ID_PEDIDO DESC";
         
         try {
@@ -108,7 +100,7 @@ public class PedidoDAO {
                 Pedido p = new Pedido(
                     rs.getInt("ID_PEDIDO"),
                     rs.getDouble("PRECIO_TOTAL"),
-                    rs.getInt("MONTAJE") == 1, // Convertimos el 1 de Oracle a boolean true
+                    rs.getInt("MONTAJE") == 1, 
                     rs.getDate("FECHA_VENTA")
                 );
                 lista.add(p);
@@ -122,16 +114,14 @@ public class PedidoDAO {
         return lista;
     }
 
-    // 3. ELIMINAR PEDIDO (NUEVO) - Devuelve el stock y borra el pedido
     public boolean eliminarPedido(int idPedido) {
         BaseDatos bd = new BaseDatos();
         Connection con = bd.getConn();
         if (con == null) return false;
         
         try {
-            con.setAutoCommit(false); // Inicio transacción para seguridad
+            con.setAutoCommit(false);
             
-            // A. Recuperar Stock: Vemos qué tenía el pedido y se lo devolvemos a la tienda
             String sqlRecuperarStock = "SELECT ID_COMPONENTE, CANTIDAD FROM PEDIDO_COMPONENTE WHERE ID_PEDIDO = ?";
             PreparedStatement psLeer = con.prepareStatement(sqlRecuperarStock);
             psLeer.setInt(1, idPedido);
@@ -141,24 +131,22 @@ public class PedidoDAO {
             PreparedStatement psStock = con.prepareStatement(sqlUpdateStock);
             
             while(rs.next()) {
-                psStock.setInt(1, rs.getInt("CANTIDAD")); // Sumamos cantidad
+                psStock.setInt(1, rs.getInt("CANTIDAD")); 
                 psStock.setInt(2, rs.getInt("ID_COMPONENTE"));
                 psStock.executeUpdate();
             }
             
-            // B. Borrar las líneas del pedido
             String sqlBorrarLineas = "DELETE FROM PEDIDO_COMPONENTE WHERE ID_PEDIDO = ?";
             PreparedStatement psLineas = con.prepareStatement(sqlBorrarLineas);
             psLineas.setInt(1, idPedido);
             psLineas.executeUpdate();
             
-            // C. Borrar el pedido (Cabecera)
             String sqlBorrarCabecera = "DELETE FROM PEDIDO WHERE ID_PEDIDO = ?";
             PreparedStatement psCabecera = con.prepareStatement(sqlBorrarCabecera);
             psCabecera.setInt(1, idPedido);
             psCabecera.executeUpdate();
             
-            con.commit(); // Confirmar borrado y devolución de stock
+            con.commit(); 
             return true;
             
         } catch (SQLException e) {
@@ -174,7 +162,6 @@ public class PedidoDAO {
         
         if (con == null) return detalles;
         
-        // Consultamos la tabla intermedia PEDIDO_COMPONENTE
         String sql = "SELECT ID_COMPONENTE, CANTIDAD, PRECIO_UNITARIO FROM PEDIDO_COMPONENTE WHERE ID_PEDIDO = ?";
         
         try {
@@ -183,7 +170,6 @@ public class PedidoDAO {
             ResultSet rs = ps.executeQuery();
             
             while(rs.next()) {
-                // Creamos el objeto LineaPedido con lo que había en la base de datos
                 LineaPedido linea = new LineaPedido(
                     rs.getInt("ID_COMPONENTE"),
                     rs.getInt("CANTIDAD"),

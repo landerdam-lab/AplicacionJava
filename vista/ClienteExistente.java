@@ -17,7 +17,6 @@ public class ClienteExistente extends JFrame {
 	private EventosClienteExistente eventosClienteExistente;
 	private JButton btnComprobarUsuario;
 
-	// Constructor
 	public ClienteExistente() {
 		setTitle("ClienteExistente");
 		setResizable(false);

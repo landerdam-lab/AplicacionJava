@@ -78,11 +78,9 @@ public class Componente {
 		this.precioVenta = precioVenta;
 	}
 	
-	// En modelo/Componente.java
 
     @Override
     public String toString() {
-        // Esto añade "(Stock: X)" al lado del precio en el desplegable
         return nombre + " - " + precioVenta + "€ (Stock: " + stock + ")";
     }
 }

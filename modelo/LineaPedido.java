@@ -10,7 +10,29 @@ public class LineaPedido {
         this.precioUnitario = precioUnitario;
     }
 
-    public int getIdComponente() { return idComponente; }
-    public int getCantidad() { return cantidad; }
-    public double getPrecioUnitario() { return precioUnitario; }
+	public int getIdComponente() {
+		return idComponente;
+	}
+
+	public void setIdComponente(int idComponente) {
+		this.idComponente = idComponente;
+	}
+
+	public int getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public double getPrecioUnitario() {
+		return precioUnitario;
+	}
+
+	public void setPrecioUnitario(double precioUnitario) {
+		this.precioUnitario = precioUnitario;
+	}
+
+    
 }

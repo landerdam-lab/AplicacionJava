@@ -32,7 +32,6 @@ public class EventosConfigurarPC implements ActionListener {
         vista.getChkMontaje().setSelected(montaje);
         
         for (LineaPedido linea : viejos) {
-            // Buscamos y seleccionamos en los combos
             for (JComboBox<Componente> combo : vista.getCombosComponentes()) {
                 for (int i = 0; i < combo.getItemCount(); i++) {
                     Componente c = combo.getItemAt(i);
@@ -56,7 +55,6 @@ public class EventosConfigurarPC implements ActionListener {
             finalizarCompra();
         }
         else {
-            // Si cambia un combo o el checkbox, recalculamos
             recalcular();
         }
     }
@@ -86,7 +84,6 @@ public class EventosConfigurarPC implements ActionListener {
     }
 
     private void finalizarCompra() {
-        // Validar selección completa
         for (JComboBox<Componente> combo : vista.getCombosComponentes()) {
             if (combo.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(vista, "Selecciona todos los componentes.");

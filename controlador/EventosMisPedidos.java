@@ -58,7 +58,7 @@ public class EventosMisPedidos implements ActionListener {
         if (confirm == JOptionPane.YES_OPTION) {
             if (pedidoDAO.eliminarPedido(idPedido)) {
                 JOptionPane.showMessageDialog(vista, "Pedido eliminado.");
-                cargarDatosIniciales(); // Recargar tabla
+                cargarDatosIniciales();
             } else {
                 JOptionPane.showMessageDialog(vista, "Error al eliminar.");
             }
@@ -78,13 +78,11 @@ public class EventosMisPedidos implements ActionListener {
             String tipoPedido = (String) vista.getModeloTabla().getValueAt(fila, 2);
             boolean esConfiguracion = tipoPedido.contains("Configurado");
 
-            // Lógica de negocio
             List<LineaPedido> productos = pedidoDAO.recuperarDetallesPedido(idPedido);
             boolean borrado = pedidoDAO.eliminarPedido(idPedido);
 
             if (borrado) {
                 vista.dispose();
-                // Navegación
                 if (esConfiguracion) {
                     new ConfigurarPC(vista.getClienteActual(), productos, true).setVisible(true);
                 } else {

@@ -14,13 +14,57 @@ public class Pedido {
         this.fecha = fecha;
     }
 
-    public int getIdPedido() { return idPedido; }
-    public double getPrecioTotal() { return precioTotal; }
-    public boolean isMontaje() { return montaje; }
-    public Date getFecha() { return fecha; }
     
-    // Para mostrar texto amigable si tiene montaje o no
+    
     public String getTipoPedido() {
         return montaje ? "PC Configurado (+Montaje)" : "Componentes Sueltos";
     }
+
+
+
+	public int getIdPedido() {
+		return idPedido;
+	}
+
+
+
+	public void setIdPedido(int idPedido) {
+		this.idPedido = idPedido;
+	}
+
+
+
+	public double getPrecioTotal() {
+		return precioTotal;
+	}
+
+
+
+	public void setPrecioTotal(double precioTotal) {
+		this.precioTotal = precioTotal;
+	}
+
+
+
+	public boolean isMontaje() {
+		return montaje;
+	}
+
+
+
+	public void setMontaje(boolean montaje) {
+		this.montaje = montaje;
+	}
+
+
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
 }

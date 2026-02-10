@@ -25,7 +25,7 @@ public class ClientesRegistro extends JFrame {
 
 	public ClientesRegistro(ClientesInicio clientesInicio) {
 		setTitle("Registro de Cliente");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Mejor DISPOSE que EXIT para no cerrar toda la app
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

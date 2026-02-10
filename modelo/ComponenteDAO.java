@@ -8,7 +8,6 @@ import java.util.List;
 
 public class ComponenteDAO {
 
-    // MÉTODO 1: Obtener lista de componentes por tipo (para los desplegables)
     public List<Componente> obtenerComponentes(String tabla) {
         List<Componente> lista = new ArrayList<>();
         BaseDatos bd = new BaseDatos();
@@ -16,7 +15,6 @@ public class ComponenteDAO {
 
         if (con == null) return lista;
 
-        // SQL Dinámico
         String sql = "SELECT * FROM COMPONENTE c JOIN " + tabla + " t ON c.ID_COMPONENTE = t.ID_COMPONENTE";
 
         try {
@@ -24,7 +22,6 @@ public class ComponenteDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                // Datos Comunes
                 int id = rs.getInt("ID_COMPONENTE");
                 String desc = rs.getString("DESCRIPCION");
                 String nom = rs.getString("NOMBRE");
@@ -34,7 +31,6 @@ public class ComponenteDAO {
 
                 Componente comp = null;
 
-                // Switch para crear el objeto específico según la tabla
                 switch (tabla.toUpperCase()) {
                     case "PROCESADOR":
                         comp = new Procesador(id, desc, nom, null, stock, idMarca, precio, 
@@ -99,7 +95,6 @@ public class ComponenteDAO {
         return lista;
     }
 
-    // MÉTODO 2: Buscar un componente solo por su ID (para recuperar pedidos al editar)
     public Componente obtenerComponentePorId(int id) {
         BaseDatos bd = new BaseDatos();
         Connection con = bd.getConn();
@@ -115,13 +110,12 @@ public class ComponenteDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                // Creamos un componente genérico con los datos básicos
-                // Esto es suficiente para llenar el carrito visualmente
+               
                 comp = new Componente(
                     rs.getInt("ID_COMPONENTE"),
                     rs.getString("DESCRIPCION"),
                     rs.getString("NOMBRE"),
-                    null, // imagen (si no la usas)
+                    null, 
                     rs.getInt("STOCK"),
                     rs.getInt("ID_MARCA"),
                     rs.getDouble("PRECIO_VENTA")

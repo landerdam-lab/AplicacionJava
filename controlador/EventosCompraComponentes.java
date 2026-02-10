@@ -14,7 +14,6 @@ public class EventosCompraComponentes implements ActionListener {
     private ComponenteDAO componenteDAO;
     private PedidoDAO pedidoDAO;
     
-    // El estado del carrito vive en el controlador
     private List<LineaPedido> carritoDeCompra;
     private double precioTotalAcumulado = 0.0;
 
@@ -25,7 +24,6 @@ public class EventosCompraComponentes implements ActionListener {
         this.carritoDeCompra = new ArrayList<>();
     }
 
-    // Método para cargar los datos en los combos de la vista al inicio
     public List<List<Componente>> obtenerCatalogo() {
         String[] tablasBD = { "PROCESADOR", "PLACA_BASE", "RAM", "TARJETA_GRAFICA", "DISCO_DURO", "CAJA", "FUENTE_ALIMENTACION", "REFRIGERACION", "MONITOR", "TECLADO", "RATON" };
         List<List<Componente>> catalogoCompleto = new ArrayList<>();
@@ -36,7 +34,6 @@ public class EventosCompraComponentes implements ActionListener {
         return catalogoCompleto;
     }
     
-    // Método para cuando venimos de "Editar Pedido"
     public void cargarProductosPrevios(List<LineaPedido> previos) {
         for (LineaPedido linea : previos) {
             Componente comp = componenteDAO.obtenerComponentePorId(linea.getIdComponente());
@@ -61,8 +58,7 @@ public class EventosCompraComponentes implements ActionListener {
             eliminarDelCarrito();
         } 
         else {
-            // Verificar si es uno de los botones "Añadir"
-            // Usamos el ActionCommand que seteamos en la vista (0, 1, 2...)
+            
             try {
                 int index = Integer.parseInt(e.getActionCommand());
                 Componente c = (Componente) vista.getComboAt(index).getSelectedItem();
@@ -71,7 +67,6 @@ public class EventosCompraComponentes implements ActionListener {
                 if (c != null) anadirLogicaCarrito(c, cantidad);
                 
             } catch (NumberFormatException ex) {
-                // No era un botón de añadir
             }
         }
     }
@@ -85,10 +80,8 @@ public class EventosCompraComponentes implements ActionListener {
         double subtotal = c.getPrecioVenta() * cantidad;
         precioTotalAcumulado += subtotal;
 
-        // Añadir a lista lógica
         carritoDeCompra.add(new LineaPedido(c.getIdComponente(), cantidad, c.getPrecioVenta()));
         
-        // Actualizar vista
         String texto = cantidad + "x " + c.getNombre() + " (" + String.format("%.2f", subtotal) + "€)";
         vista.agregarItemVisual(texto);
         vista.actualizarTotalVisual("TOTAL: " + String.format("%.2f", precioTotalAcumulado) + "€");
