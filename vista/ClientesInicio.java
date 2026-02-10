@@ -13,7 +13,6 @@ public class ClientesInicio extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     
-    // Controlador
     private EventosClientesInicio eventosClientesInicio;
     
     private JButton btnClienteExistente;
@@ -25,7 +24,6 @@ public class ClientesInicio extends JFrame {
         
         this.usuarioActual = usuario;
         
-        // Evitamos error si el usuario es null
         String nombreAtiende = "Desconocido";
         if (usuario != null) {
             nombreAtiende = usuario.getNombre();
@@ -51,7 +49,6 @@ public class ClientesInicio extends JFrame {
         contentPane.add(panel, BorderLayout.CENTER);
         panel.setLayout(new GridLayout(3, 1, 0, 0));
         
-        // 1. Crear botones
         btnClienteExistente = new JButton("Cliente Existente");
         panel.add(btnClienteExistente);
         
@@ -61,13 +58,9 @@ public class ClientesInicio extends JFrame {
         btnClienteNuevo = new JButton("Nuevo Cliente");
         panel.add(btnClienteNuevo);
         
-        // 2. Instanciar el controlador
-        // Al hacer esto, el controlador entra en su constructor y ÉL MISMO
-        // busca los botones y les pone el listener. No tienes que hacer nada más.
         eventosClientesInicio = new EventosClientesInicio(this);
     }
 
-    // --- Getters necesarios para que el controlador acceda a los botones ---
 
     public JButton getBtnClienteExistente() {
         return btnClienteExistente;
