@@ -37,10 +37,7 @@ public class EventosLogin implements ActionListener {
             inicio.setVisible(true);
             
         } else {
-            JOptionPane.showMessageDialog(login, 
-                "Usuario o contraseña incorrectos", 
-                "Error de acceso", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(login, "Usuario o contraseña incorrectos", "Error de acceso", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
