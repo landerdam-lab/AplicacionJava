@@ -1,8 +1,10 @@
 
+import java.sql.CallableStatement; 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;             
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +112,6 @@ public class ComponenteDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-               
                 comp = new Componente(
                     rs.getInt("ID_COMPONENTE"),
                     rs.getString("DESCRIPCION"),
@@ -128,5 +129,36 @@ public class ComponenteDAO {
             e.printStackTrace();
         }
         return comp;
+    }
+
+    public int obtenerStockReal(int idComponente) {
+        BaseDatos bd = new BaseDatos();
+        Connection con = bd.getConn();
+        int stockActual = 0;
+
+        if (con == null) return 0;
+
+        String sql = "{ ? = call fn_stock_disponible(?) }";
+
+        try {
+            CallableStatement cs = con.prepareCall(sql);
+
+            cs.registerOutParameter(1, Types.INTEGER);
+
+            cs.setInt(2, idComponente);
+
+            cs.execute();
+
+            stockActual = cs.getInt(1);
+
+            cs.close();
+            con.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error llamando a fn_stock_disponible: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return stockActual;
     }
 }

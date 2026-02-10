@@ -1,10 +1,8 @@
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 
@@ -14,6 +12,7 @@ public class EventosCompraComponentes implements ActionListener {
     private ComponenteDAO componenteDAO;
     private PedidoDAO pedidoDAO;
     
+    // El estado del carrito vive en el controlador
     private List<LineaPedido> carritoDeCompra;
     private double precioTotalAcumulado = 0.0;
 
@@ -25,7 +24,13 @@ public class EventosCompraComponentes implements ActionListener {
     }
 
     public List<List<Componente>> obtenerCatalogo() {
-        String[] tablasBD = { "PROCESADOR", "PLACA_BASE", "RAM", "TARJETA_GRAFICA", "DISCO_DURO", "CAJA", "FUENTE_ALIMENTACION", "REFRIGERACION", "MONITOR", "TECLADO", "RATON" };
+        // Aseguramos que los nombres coinciden con tu BD (TARJETA_GRAFICA con guion)
+        String[] tablasBD = { 
+            "PROCESADOR", "PLACA_BASE", "RAM", "TARJETA_GRAFICA", 
+            "DISCO_DURO", "CAJA", "FUENTE_ALIMENTACION", 
+            "REFRIGERACION", "MONITOR", "TECLADO", "RATON" 
+        };
+        
         List<List<Componente>> catalogoCompleto = new ArrayList<>();
         
         for (String tabla : tablasBD) {
@@ -38,6 +43,8 @@ public class EventosCompraComponentes implements ActionListener {
         for (LineaPedido linea : previos) {
             Componente comp = componenteDAO.obtenerComponentePorId(linea.getIdComponente());
             if (comp != null) {
+                // Al cargar previos, asumimos que ya verificamos stock o que queremos cargarlos igual
+                // para que el usuario decida. Usamos la lógica estándar.
                 anadirLogicaCarrito(comp, linea.getCantidad());
             }
         }
@@ -58,25 +65,38 @@ public class EventosCompraComponentes implements ActionListener {
             eliminarDelCarrito();
         } 
         else {
-            
             try {
+                // Recuperamos el índice del botón pulsado
                 int index = Integer.parseInt(e.getActionCommand());
                 Componente c = (Componente) vista.getComboAt(index).getSelectedItem();
                 int cantidad = vista.getCantidadAt(index);
                 
-                if (c != null) anadirLogicaCarrito(c, cantidad);
+                if (c != null) {
+                    anadirLogicaCarrito(c, cantidad);
+                }
                 
             } catch (NumberFormatException ex) {
+                // Ignorar eventos que no sean de los botones numéricos
             }
         }
     }
 
     private void anadirLogicaCarrito(Componente c, int cantidad) {
-        if (cantidad > c.getStock()) {
-            JOptionPane.showMessageDialog(vista, "Stock insuficiente.", "Error", JOptionPane.WARNING_MESSAGE);
-            return;
+        
+        // --- CAMBIO IMPORTANTE: VALIDACIÓN CONTRA ORACLE EN TIEMPO REAL ---
+        int stockReal = componenteDAO.obtenerStockReal(c.getIdComponente());
+
+        if (cantidad > stockReal) {
+            JOptionPane.showMessageDialog(vista, 
+                "No hay suficiente stock real en el almacén.\n" +
+                "Solicitado: " + cantidad + "\n" +
+                "Disponible: " + stockReal, 
+                "Error de Stock", 
+                JOptionPane.WARNING_MESSAGE);
+            return; // No añadimos nada
         }
 
+        // Si hay stock, procedemos
         double subtotal = c.getPrecioVenta() * cantidad;
         precioTotalAcumulado += subtotal;
 
@@ -96,23 +116,26 @@ public class EventosCompraComponentes implements ActionListener {
             carritoDeCompra.remove(index);
             vista.quitarItemVisual(index);
             vista.actualizarTotalVisual("TOTAL: " + String.format("%.2f", precioTotalAcumulado) + "€");
+        } else {
+            JOptionPane.showMessageDialog(vista, "Selecciona un producto de la lista para quitarlo.");
         }
     }
 
     private void finalizarPedido() {
         if (carritoDeCompra.isEmpty()) {
-            JOptionPane.showMessageDialog(vista, "Carrito vacío.");
+            JOptionPane.showMessageDialog(vista, "El carrito está vacío.");
             return;
         }
 
+        // Registrar pedido (false = sin montaje)
         boolean exito = pedidoDAO.registrarPedido(vista.getClienteActual(), carritoDeCompra, precioTotalAcumulado, false);
 
         if (exito) {
-            JOptionPane.showMessageDialog(vista, "¡Pedido realizado!");
+            JOptionPane.showMessageDialog(vista, "¡Pedido realizado con éxito!");
             vista.dispose();
             new MenuCompras(vista.getClienteActual()).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(vista, "Error al guardar.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "Error al guardar el pedido.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
