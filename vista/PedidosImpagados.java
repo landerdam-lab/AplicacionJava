@@ -36,7 +36,6 @@ public class PedidosImpagados extends JFrame {
 		tablaImpagos = new JTable();
 		modeloTabla = new DefaultTableModel(
 				new Object[][] {},
-				// --- CAMBIO AQUÍ: QUITAMOS "ID CLIENTE" ---
 				new String[] { "ID Pedido", "Total (€)", "Fecha Venta" }
 				) {
 			public boolean isCellEditable(int row, int column) { return false; }
