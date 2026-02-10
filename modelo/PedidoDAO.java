@@ -9,7 +9,6 @@ import java.util.List;
 
 public class PedidoDAO {
 
-    // 1. REGISTRAR PEDIDO
     public boolean registrarPedido(Cliente cliente, List<LineaPedido> carrito, double total, boolean conMontaje) {
         BaseDatos bd = new BaseDatos();
         Connection con = bd.getConn();
@@ -23,7 +22,6 @@ public class PedidoDAO {
         try {
             con.setAutoCommit(false);
 
-            // A. Obtener ID
             int nuevoIdPedido = 1;
             String sqlId = "SELECT NVL(MAX(ID_PEDIDO), 0) + 1 FROM PEDIDO";
             PreparedStatement psId = con.prepareStatement(sqlId);
@@ -34,7 +32,6 @@ public class PedidoDAO {
             rsId.close();
             psId.close();
 
-            // B. Insertar Cabecera (PAGADO se pondrá a 0 por defecto en la BD)
             String sqlCabecera = "INSERT INTO PEDIDO (ID_PEDIDO, PRECIO_TOTAL, MONTAJE, FECHA_VENTA, ID_CLIENTE, USUARIO_TRABAJADOR) " +
                                  "VALUES (?, ?, ?, CURRENT_DATE, (SELECT ID_CLIENTE FROM CLIENTE WHERE EMAIL = ?), 'admin')";
             
@@ -45,7 +42,6 @@ public class PedidoDAO {
             psPedido.setString(4, cliente.getEmail());
             psPedido.executeUpdate();
 
-            // C. Insertar Detalles y Restar Stock
             String sqlDetalle = "INSERT INTO PEDIDO_COMPONENTE (ID_PEDIDO, ID_COMPONENTE, CANTIDAD, PRECIO_UNITARIO) VALUES (?, ?, ?, ?)";
             String sqlUpdateStock = "UPDATE COMPONENTE SET STOCK = STOCK - ? WHERE ID_COMPONENTE = ?";
             
@@ -53,14 +49,12 @@ public class PedidoDAO {
             psStock = con.prepareStatement(sqlUpdateStock);
 
             for (LineaPedido linea : carrito) {
-                // Detalle
                 psDetalle.setInt(1, nuevoIdPedido);
                 psDetalle.setInt(2, linea.getIdComponente());
                 psDetalle.setInt(3, linea.getCantidad());
                 psDetalle.setDouble(4, linea.getPrecioUnitario());
                 psDetalle.executeUpdate();
 
-                // Stock
                 psStock.setInt(1, linea.getCantidad());
                 psStock.setInt(2, linea.getIdComponente());
                 int filas = psStock.executeUpdate();
@@ -89,7 +83,6 @@ public class PedidoDAO {
         }
     }
 
-    // 2. LISTAR PEDIDOS (Actualizado para leer PAGADO)
     public List<Pedido> listarPedidos(String emailCliente) {
         List<Pedido> lista = new ArrayList<>();
         BaseDatos bd = new BaseDatos();
@@ -97,7 +90,6 @@ public class PedidoDAO {
         
         if (con == null) return lista;
         
-        // Incluimos la columna PAGADO en la select
         String sql = "SELECT * FROM PEDIDO WHERE ID_CLIENTE = (SELECT ID_CLIENTE FROM CLIENTE WHERE EMAIL = ?) ORDER BY ID_PEDIDO DESC";
         
         try {
@@ -106,13 +98,13 @@ public class PedidoDAO {
             ResultSet rs = ps.executeQuery();
             
             while(rs.next()) {
-                // Usamos el nuevo constructor de Pedido con 5 argumentos
                 Pedido p = new Pedido(
                     rs.getInt("ID_PEDIDO"),
                     rs.getDouble("PRECIO_TOTAL"),
                     rs.getInt("MONTAJE") == 1, 
                     rs.getDate("FECHA_VENTA"),
-                    rs.getInt("PAGADO") == 1 // Convertimos 1/0 a boolean
+                    rs.getInt("PAGADO") == 1,
+                    rs.getInt("ID_CLIENTE") 
                 );
                 lista.add(p);
             }
@@ -125,7 +117,6 @@ public class PedidoDAO {
         return lista;
     }
 
-    // 3. PAGAR PEDIDO (Nuevo método)
     public boolean pagarPedido(int idPedido) {
         BaseDatos bd = new BaseDatos();
         Connection con = bd.getConn();
@@ -151,7 +142,6 @@ public class PedidoDAO {
         }
     }
 
-    // 4. ELIMINAR PEDIDO (Usando tu procedimiento de cancelación sería ideal, aquí dejo la versión Java manual)
     public boolean eliminarPedido(int idPedido) {
         BaseDatos bd = new BaseDatos();
         Connection con = bd.getConn();
@@ -160,7 +150,6 @@ public class PedidoDAO {
         try {
             con.setAutoCommit(false);
             
-            // A. Devolver Stock
             String sqlRecuperarStock = "SELECT ID_COMPONENTE, CANTIDAD FROM PEDIDO_COMPONENTE WHERE ID_PEDIDO = ?";
             PreparedStatement psLeer = con.prepareStatement(sqlRecuperarStock);
             psLeer.setInt(1, idPedido);
@@ -175,13 +164,11 @@ public class PedidoDAO {
                 psStock.executeUpdate();
             }
             
-            // B. Borrar Líneas
             String sqlBorrarLineas = "DELETE FROM PEDIDO_COMPONENTE WHERE ID_PEDIDO = ?";
             PreparedStatement psLineas = con.prepareStatement(sqlBorrarLineas);
             psLineas.setInt(1, idPedido);
             psLineas.executeUpdate();
             
-            // C. Borrar Cabecera
             String sqlBorrarCabecera = "DELETE FROM PEDIDO WHERE ID_PEDIDO = ?";
             PreparedStatement psCabecera = con.prepareStatement(sqlBorrarCabecera);
             psCabecera.setInt(1, idPedido);
@@ -197,7 +184,6 @@ public class PedidoDAO {
         }
     }
 
-    // 5. RECUPERAR DETALLES (Para editar)
     public List<LineaPedido> recuperarDetallesPedido(int idPedido) {
         List<LineaPedido> detalles = new ArrayList<>();
         BaseDatos bd = new BaseDatos();
@@ -229,7 +215,6 @@ public class PedidoDAO {
         return detalles;
     }
 
-    // 6. LISTAR IMPAGADOS (Usando el Procedimiento Oracle con Cursor)
     public List<Pedido> listarPedidosImpagados() {
         List<Pedido> lista = new ArrayList<>();
         BaseDatos bd = new BaseDatos();
@@ -241,21 +226,19 @@ public class PedidoDAO {
 
         try {
             CallableStatement cs = con.prepareCall(sql);
-            // -10 es el código para OracleTypes.CURSOR
             cs.registerOutParameter(1, -10); 
             cs.execute();
 
             ResultSet rs = (ResultSet) cs.getObject(1);
 
             while (rs.next()) {
-                // El procedure devuelve ID, TOTAL, FECHA, ID_CLIENTE.
-                // Asumimos montaje false y pagado false (porque es lista de impagados)
                 Pedido p = new Pedido(
                     rs.getInt("ID_PEDIDO"),
                     rs.getDouble("PRECIO_TOTAL"),
                     false, 
                     rs.getDate("FECHA_VENTA"),
-                    false 
+                    false,
+                    rs.getInt("ID_CLIENTE")
                 );
                 lista.add(p);
             }
@@ -265,6 +248,7 @@ public class PedidoDAO {
             con.close();
 
         } catch (SQLException e) {
+            System.out.println("Error al listar impagados: " + e.getMessage());
             e.printStackTrace();
         }
         return lista;

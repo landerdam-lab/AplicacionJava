@@ -3,6 +3,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Font;
+import java.awt.Color; 
 
 
 public class MenuCompras extends JFrame {
@@ -14,7 +15,7 @@ public class MenuCompras extends JFrame {
 	private JButton btnConfiguraciones;
 	private JButton btnComponentes; 
 	private JButton btnCargar;
-
+	private JButton btnImpagos; 
 	public MenuCompras(Cliente cliente) {
 		
 		this.clienteActual = cliente;
@@ -22,32 +23,39 @@ public class MenuCompras extends JFrame {
 		setTitle("Menu Compras - Usuario: " + clienteActual.getNombre());
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(700, 300, 913, 578);
+		setBounds(700, 300, 913, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		btnConfiguraciones = new JButton("Comprar Configuraciones");
-		btnConfiguraciones.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnConfiguraciones.setBounds(294, 200, 309, 86);
-		contentPane.add(btnConfiguraciones);
-		
 		btnComponentes = new JButton("Comprar Componentes");
 		btnComponentes.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnComponentes.setBounds(294, 63, 309, 86);
+		btnComponentes.setBounds(294, 40, 309, 86);
 		contentPane.add(btnComponentes);
+
+		btnConfiguraciones = new JButton("Comprar Configuraciones");
+		btnConfiguraciones.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnConfiguraciones.setBounds(294, 150, 309, 86);
+		contentPane.add(btnConfiguraciones);
 		
-		btnCargar = new JButton("Cargar Pedidos");
+		btnCargar = new JButton("Mis Pedidos");
 		btnCargar.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnCargar.setBounds(294, 333, 309, 86);
+		btnCargar.setBounds(294, 260, 309, 86);
 		contentPane.add(btnCargar);
+		
+		btnImpagos = new JButton("ADMIN: Ver Impagos (Oracle Cursor)");
+		btnImpagos.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnImpagos.setForeground(Color.RED); 
+		btnImpagos.setBounds(294, 400, 309, 60);
+		contentPane.add(btnImpagos);
 		
 		EventosMenuCompras controller = new EventosMenuCompras(this);
 		
 		btnComponentes.addActionListener(controller);
 		btnConfiguraciones.addActionListener(controller);
 		btnCargar.addActionListener(controller);
+		btnImpagos.addActionListener(controller); 
 	}
 	
 	
@@ -65,5 +73,9 @@ public class MenuCompras extends JFrame {
 
 	public JButton getBtnCargarPedidos() {
 		return btnCargar;
+	}
+	
+	public JButton getBtnImpagos() {
+		return btnImpagos;
 	}
 }
