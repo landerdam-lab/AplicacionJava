@@ -11,9 +11,8 @@ public class MenuCompras extends JFrame {
 	private JPanel contentPane;
 	private Cliente clienteActual;
 	
-	// Definimos los botones como variables de clase para poder hacer getters
 	private JButton btnConfiguraciones;
-	private JButton btnComponentes; // Ojo, antes lo llamabas bntComponentes
+	private JButton btnComponentes; 
 	private JButton btnCargar;
 
 	public MenuCompras(Cliente cliente) {
@@ -23,7 +22,7 @@ public class MenuCompras extends JFrame {
 		setTitle("Menu Compras - Usuario: " + clienteActual.getNombre());
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 913, 578);
+		setBounds(700, 300, 913, 578);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -44,7 +43,6 @@ public class MenuCompras extends JFrame {
 		btnCargar.setBounds(294, 333, 309, 86);
 		contentPane.add(btnCargar);
 		
-		// --- AQUÍ ESTÁ LA SOLUCIÓN: CONECTAMOS EL CONTROLADOR ---
 		EventosMenuCompras controller = new EventosMenuCompras(this);
 		
 		btnComponentes.addActionListener(controller);
@@ -52,7 +50,6 @@ public class MenuCompras extends JFrame {
 		btnCargar.addActionListener(controller);
 	}
 	
-	// --- GETTERS (IMPRESCINDIBLES) ---
 	
 	public Cliente getClienteActual() {
 		return clienteActual;

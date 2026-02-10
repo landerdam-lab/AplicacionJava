@@ -29,7 +29,7 @@ public class EventosClienteExistente implements ActionListener {
 
 			if (clienteLogueado != null) {
 
-				JOptionPane.showMessageDialog(clienteExistente, "¡Hola " + clienteLogueado.getNombre() + "! Acceso permitido.");
+				//JOptionPane.showMessageDialog(clienteExistente, "¡Hola " + clienteLogueado.getNombre() + "! Acceso permitido.");
 				
 				clienteExistente.dispose();
 

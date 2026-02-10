@@ -23,7 +23,7 @@ public class MisPedidos extends JFrame {
 
         setTitle("Historial de Pedidos - Cliente: " + cliente.getNombre());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 800, 500);
+        setBounds(700, 300, 800, 500);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);

@@ -28,7 +28,7 @@ public class EventosLogin implements ActionListener {
 
         if (usuarioLogueado != null) {
             
-            JOptionPane.showMessageDialog(login, "Bienvenido " + usuarioLogueado.getNombre() + " " + usuarioLogueado.getApellido1());
+            //JOptionPane.showMessageDialog(login, "Bienvenido " + usuarioLogueado.getNombre() + " " + usuarioLogueado.getApellido1());
             
             login.dispose();
 

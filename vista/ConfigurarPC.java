@@ -26,7 +26,6 @@ public class ConfigurarPC extends JFrame {
 		inicializarVentana();
 	}
 
-	// --- CONSTRUCTOR 2: EDITAR CONFIGURACIÓN ---
 	public ConfigurarPC(Cliente cliente, List<LineaPedido> componentesViejos, boolean teniaMontaje) {
 		this(cliente);
 		controller.cargarConfiguracionPrevia(componentesViejos, teniaMontaje);
@@ -35,7 +34,7 @@ public class ConfigurarPC extends JFrame {
 	private void inicializarVentana() {
 		setTitle("Configurador PC - " + clienteActual.getNombre());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1100, 700);
+		setBounds(700, 300, 1100, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
