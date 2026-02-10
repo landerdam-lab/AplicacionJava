@@ -30,7 +30,7 @@ public class EventosClienteRegistro implements ActionListener {
             boolean registrado = clienteDAO.registrarCliente(nombre, correo, dni, telefono);
             
             if (registrado) {
-                JOptionPane.showMessageDialog(clientesRegistro, "¡Cliente registrado correctamente!");
+                //JOptionPane.showMessageDialog(clientesRegistro, "¡Cliente registrado correctamente!");
               
                 clientesRegistro.dispose(); 
                 ClienteExistente existe = new ClienteExistente();

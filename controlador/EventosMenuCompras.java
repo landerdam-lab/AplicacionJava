@@ -15,7 +15,6 @@ public class EventosMenuCompras implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        // ... tus otros botones (Componentes, Configurar, Pedidos, Impagos) ...
         if (e.getSource() == menuCompras.getBtnComponentes()) {
             menuCompras.dispose();
             new CompraComponentes(menuCompras.getClienteActual()).setVisible(true);
@@ -34,11 +33,9 @@ public class EventosMenuCompras implements ActionListener {
             new PedidosImpagados().setVisible(true);
         }
 
-        // --- BOTÓN VOLVER: AHORA VA A 'ClientesInicio' ---
         else if (e.getSource() == menuCompras.getBtnVolver()) {
             menuCompras.dispose(); 
             
-            // Ahora esto funcionará aunque sea null
             ClientesInicio inicio = new ClientesInicio(null); 
             inicio.setVisible(true);
         }

@@ -23,7 +23,6 @@ public class EventosConfigurarPC implements ActionListener {
     }
 
     public List<List<Componente>> obtenerDatosCombos() {
-        // TARJETA_GRAFICA con guion bajo, correcto para Oracle
         String[] tablasBD = { "PROCESADOR", "PLACA_BASE", "RAM", "TARJETA_GRAFICA", "DISCO_DURO", "CAJA", "FUENTE_ALIMENTACION" };
         List<List<Componente>> datos = new ArrayList<>();
         for (String t : tablasBD) datos.add(componenteDAO.obtenerComponentes(t));
@@ -34,7 +33,6 @@ public class EventosConfigurarPC implements ActionListener {
         vista.getChkMontaje().setSelected(montaje);
         
         for (LineaPedido linea : viejos) {
-            // Buscamos y seleccionamos en los combos
             for (JComboBox<Componente> combo : vista.getCombosComponentes()) {
                 for (int i = 0; i < combo.getItemCount(); i++) {
                     Componente c = combo.getItemAt(i);
@@ -59,7 +57,6 @@ public class EventosConfigurarPC implements ActionListener {
             finalizarCompra();
         }
         else {
-            // Si cambia cualquier combo o el checkbox
             recalcular();
         }
     }
@@ -89,7 +86,6 @@ public class EventosConfigurarPC implements ActionListener {
     }
 
     private void finalizarCompra() {
-        // 1. Validar que todo está seleccionado
         for (JComboBox<Componente> combo : vista.getCombosComponentes()) {
             if (combo.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(vista, "Por favor, selecciona todos los componentes para completar la configuración.");
@@ -99,11 +95,9 @@ public class EventosConfigurarPC implements ActionListener {
 
         List<LineaPedido> carrito = new ArrayList<>();
         
-        // 2. Validar STOCK REAL con Oracle
         for (JComboBox<Componente> combo : vista.getCombosComponentes()) {
             Componente c = (Componente) combo.getSelectedItem();
             
-            // --- LLAMADA A LA FUNCIÓN DE ORACLE ---
             int stockReal = componenteDAO.obtenerStockReal(c.getIdComponente());
             
             if (stockReal < 1) {
@@ -111,14 +105,12 @@ public class EventosConfigurarPC implements ActionListener {
                     "Lo sentimos, ya no queda stock de: " + c.getNombre() + "\nStock actual: " + stockReal,
                     "Error de Stock", 
                     JOptionPane.WARNING_MESSAGE);
-                return; // Cancelamos la compra
+                return; 
             }
             
-            // Si hay stock, añadimos al carrito temporal (cantidad siempre 1 en configs)
             carrito.add(new LineaPedido(c.getIdComponente(), 1, c.getPrecioVenta()));
         }
 
-        // 3. Guardar en Base de Datos
         boolean exito = pedidoDAO.registrarPedido(vista.getClienteActual(), carrito, precioTotalCalculado, vista.getChkMontaje().isSelected());
 
         if (exito) {

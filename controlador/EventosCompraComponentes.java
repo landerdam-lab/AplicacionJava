@@ -12,7 +12,6 @@ public class EventosCompraComponentes implements ActionListener {
     private ComponenteDAO componenteDAO;
     private PedidoDAO pedidoDAO;
     
-    // El estado del carrito vive en el controlador
     private List<LineaPedido> carritoDeCompra;
     private double precioTotalAcumulado = 0.0;
 
@@ -24,7 +23,6 @@ public class EventosCompraComponentes implements ActionListener {
     }
 
     public List<List<Componente>> obtenerCatalogo() {
-        // Aseguramos que los nombres coinciden con tu BD (TARJETA_GRAFICA con guion)
         String[] tablasBD = { 
             "PROCESADOR", "PLACA_BASE", "RAM", "TARJETA_GRAFICA", 
             "DISCO_DURO", "CAJA", "FUENTE_ALIMENTACION", 
@@ -43,8 +41,6 @@ public class EventosCompraComponentes implements ActionListener {
         for (LineaPedido linea : previos) {
             Componente comp = componenteDAO.obtenerComponentePorId(linea.getIdComponente());
             if (comp != null) {
-                // Al cargar previos, asumimos que ya verificamos stock o que queremos cargarlos igual
-                // para que el usuario decida. Usamos la lógica estándar.
                 anadirLogicaCarrito(comp, linea.getCantidad());
             }
         }
@@ -66,7 +62,6 @@ public class EventosCompraComponentes implements ActionListener {
         } 
         else {
             try {
-                // Recuperamos el índice del botón pulsado
                 int index = Integer.parseInt(e.getActionCommand());
                 Componente c = (Componente) vista.getComboAt(index).getSelectedItem();
                 int cantidad = vista.getCantidadAt(index);
@@ -76,14 +71,12 @@ public class EventosCompraComponentes implements ActionListener {
                 }
                 
             } catch (NumberFormatException ex) {
-                // Ignorar eventos que no sean de los botones numéricos
             }
         }
     }
 
     private void anadirLogicaCarrito(Componente c, int cantidad) {
         
-        // --- CAMBIO IMPORTANTE: VALIDACIÓN CONTRA ORACLE EN TIEMPO REAL ---
         int stockReal = componenteDAO.obtenerStockReal(c.getIdComponente());
 
         if (cantidad > stockReal) {
@@ -93,10 +86,9 @@ public class EventosCompraComponentes implements ActionListener {
                 "Disponible: " + stockReal, 
                 "Error de Stock", 
                 JOptionPane.WARNING_MESSAGE);
-            return; // No añadimos nada
+            return; 
         }
 
-        // Si hay stock, procedemos
         double subtotal = c.getPrecioVenta() * cantidad;
         precioTotalAcumulado += subtotal;
 
@@ -127,7 +119,6 @@ public class EventosCompraComponentes implements ActionListener {
             return;
         }
 
-        // Registrar pedido (false = sin montaje)
         boolean exito = pedidoDAO.registrarPedido(vista.getClienteActual(), carritoDeCompra, precioTotalAcumulado, false);
 
         if (exito) {

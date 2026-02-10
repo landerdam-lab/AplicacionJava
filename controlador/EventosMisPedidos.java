@@ -17,10 +17,8 @@ public class EventosMisPedidos implements ActionListener {
     }
     
     public void cargarDatosIniciales() {
-        // Limpiamos la tabla
         vista.getModeloTabla().setRowCount(0);
         
-        // Obtenemos los pedidos desde la BD
         List<Pedido> lista = pedidoDAO.listarPedidos(vista.getClienteActual().getEmail());
         
         for (Pedido p : lista) {
@@ -29,7 +27,7 @@ public class EventosMisPedidos implements ActionListener {
                 p.getFecha(),
                 p.getTipoPedido(),
                 p.getPrecioTotal(),
-                p.getEstadoPago() // <--- AÑADIDO: Muestra "PAGADO" o "PENDIENTE"
+                p.getEstadoPago()
             });
         }
     }
@@ -50,13 +48,11 @@ public class EventosMisPedidos implements ActionListener {
             editarPedido();
         }
         
-        // --- NUEVO LISTENER PARA PAGAR ---
         else if (e.getSource() == vista.getBtnPagar()) {
             pagarPedidoSeleccionado();
         }
     }
 
-    // --- NUEVO MÉTODO PARA GESTIONAR EL PAGO ---
     private void pagarPedidoSeleccionado() {
         int fila = vista.getTablaPedidos().getSelectedRow();
         
@@ -65,7 +61,6 @@ public class EventosMisPedidos implements ActionListener {
             return;
         }
         
-        // 1. Verificar si ya está pagado (Miramos la columna 4: Estado)
         String estadoActual = (String) vista.getModeloTabla().getValueAt(fila, 4);
         
         if ("PAGADO".equals(estadoActual)) {
@@ -73,11 +68,9 @@ public class EventosMisPedidos implements ActionListener {
             return;
         }
         
-        // 2. Obtener datos para el mensaje
         int idPedido = (int) vista.getModeloTabla().getValueAt(fila, 0);
         double total = (double) vista.getModeloTabla().getValueAt(fila, 3);
         
-        // 3. Confirmación (Simulación de Pasarela de Pago)
         int confirm = JOptionPane.showConfirmDialog(vista, 
                 "Vas a proceder al pago del Pedido #" + idPedido + "\n" +
                 "Importe total: " + total + "€\n" +
@@ -87,12 +80,10 @@ public class EventosMisPedidos implements ActionListener {
                 JOptionPane.QUESTION_MESSAGE);
                 
         if (confirm == JOptionPane.YES_OPTION) {
-            // 4. Llamar al DAO para actualizar la BD
             boolean exito = pedidoDAO.pagarPedido(idPedido);
             
             if (exito) {
                 JOptionPane.showMessageDialog(vista, "¡Pago realizado con éxito! Gracias por tu compra.");
-                // 5. Recargar la tabla para ver el cambio a "PAGADO"
                 cargarDatosIniciales();
             } else {
                 JOptionPane.showMessageDialog(vista, "Hubo un error al procesar el pago.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -143,18 +134,15 @@ public class EventosMisPedidos implements ActionListener {
         if (confirm == JOptionPane.YES_OPTION) {
             int idPedido = (int) vista.getModeloTabla().getValueAt(fila, 0);
             String tipoPedido = (String) vista.getModeloTabla().getValueAt(fila, 2);
-            boolean esConfiguracion = tipoPedido.contains("Configurado"); // Detectamos si era PC completo
+            boolean esConfiguracion = tipoPedido.contains("Configurado"); 
 
-            // 1. Recuperamos los productos antes de borrar
             List<LineaPedido> productos = pedidoDAO.recuperarDetallesPedido(idPedido);
             
-            // 2. Borramos el pedido viejo (esto devuelve el stock automáticamente)
             boolean borrado = pedidoDAO.eliminarPedido(idPedido);
 
             if (borrado) {
                 vista.dispose();
                 
-                // 3. Abrimos la ventana correspondiente recargando los productos
                 if (esConfiguracion) {
                     ConfigurarPC ventana = new ConfigurarPC(vista.getClienteActual(), productos, true);
                     ventana.setVisible(true);
