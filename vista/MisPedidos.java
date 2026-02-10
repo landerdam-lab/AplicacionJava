@@ -89,7 +89,8 @@ public class MisPedidos extends JFrame {
         }
     }
     
-    // Acción EDITAR
+ // EN MisPedidos.java
+
     private void editarPedido() {
         int fila = tablaPedidos.getSelectedRow();
         if (fila == -1) {
@@ -97,27 +98,38 @@ public class MisPedidos extends JFrame {
             return;
         }
         
-        // Aviso al usuario
         int confirm = JOptionPane.showConfirmDialog(this, 
-            "Para editar el pedido, se eliminará el actual y se abrirá el carrito con tus productos.\n¿Continuar?",
+            "Se eliminará el pedido actual y se cargarán los productos para editar.\n¿Continuar?",
             "Editar Pedido", JOptionPane.YES_NO_OPTION);
             
         if (confirm == JOptionPane.YES_OPTION) {
             int idPedido = (int) modeloTabla.getValueAt(fila, 0);
             
-            // 1. Recuperamos los productos del pedido viejo
+            // Leemos el tipo de la tabla (Columna 2) para saber a dónde ir
+            String tipoPedido = (String) modeloTabla.getValueAt(fila, 2);
+            boolean esConfiguracion = tipoPedido.contains("Configurado");
+            
+            // 1. Recuperar productos
             List<LineaPedido> productos = pedidoDAO.recuperarDetallesPedido(idPedido);
             
-            // 2. Borramos el pedido viejo (esto devuelve el stock a la tienda)
+            // 2. Borrar pedido viejo (Devuelve stock)
             boolean borrado = pedidoDAO.eliminarPedido(idPedido);
             
             if (borrado) {
                 this.dispose();
-                // 3. Abrimos la tienda cargando esos productos
-                CompraComponentes tiendaEdicion = new CompraComponentes(clienteActual, productos);
-                tiendaEdicion.setVisible(true);
+                
+                if (esConfiguracion) {
+                    // ABRIR CONFIGURADOR (Pasamos true porque es una configuración)
+                    ConfigurarPC ventanaConfig = new ConfigurarPC(clienteActual, productos, true);
+                    ventanaConfig.setVisible(true);
+                } else {
+                    // ABRIR TIENDA NORMAL
+                    CompraComponentes ventanaTienda = new CompraComponentes(clienteActual, productos);
+                    ventanaTienda.setVisible(true);
+                }
+                
             } else {
-                JOptionPane.showMessageDialog(this, "Error al preparar la edición.");
+                JOptionPane.showMessageDialog(this, "Error al borrar el pedido antiguo.");
             }
         }
     }

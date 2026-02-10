@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ComponenteDAO {
 
+    // MÉTODO 1: Obtener lista de componentes por tipo (para los desplegables)
     public List<Componente> obtenerComponentes(String tabla) {
         List<Componente> lista = new ArrayList<>();
         BaseDatos bd = new BaseDatos();
@@ -33,10 +34,9 @@ public class ComponenteDAO {
 
                 Componente comp = null;
 
-                // CORRECCIÓN: Los case ahora tienen guiones bajos y los nombres de columnas son los correctos
+                // Switch para crear el objeto específico según la tabla
                 switch (tabla.toUpperCase()) {
                     case "PROCESADOR":
-                        // Error ORA-17006 solucionado: NUMERO_DE_NUCLEOS
                         comp = new Procesador(id, desc, nom, null, stock, idMarca, precio, 
                                 rs.getString("NUMERO_DE_NUCLEOS"), rs.getString("FRECUENCIA_BASE"));
                         break;
@@ -49,7 +49,6 @@ public class ComponenteDAO {
                                 rs.getString("TIPO_ALMACENAMIENTO"), rs.getString("CAPACIDAD"));
                         break;
                     case "PLACA_BASE": 
-                        // Error ORA-17006 solucionado: FACTOR_DE_FORMA
                         comp = new PlacaBase(id, desc, nom, null, stock, idMarca, precio, 
                                 rs.getString("SOCKET"), rs.getString("FACTOR_DE_FORMA"));
                         break;
@@ -62,12 +61,10 @@ public class ComponenteDAO {
                                 rs.getString("CERTIFICACION_ENERGETICA"), rs.getString("POTENCIA"));
                         break;
                     case "CAJA":
-                        // Asumo PUERTOS_FRONTALES según tu insert
                         comp = new Caja(id, desc, nom, null, stock, idMarca, precio,
                                 rs.getString("DIMENSIONES"), rs.getString("PUERTOS_FRONTALES")); 
                         break;
                     case "REFRIGERACION":
-                        // Error ORA-17006 solucionado: TAMAÑO con Ñ
                         comp = new Refrigeracion(id, desc, nom, null, stock, idMarca, precio,
                                 rs.getString("TIPO"), rs.getString("TAMAÑO"));
                         break;
@@ -101,12 +98,8 @@ public class ComponenteDAO {
         }
         return lista;
     }
- // ... (resto de métodos anteriores) ...
 
-    // NUEVO: Buscar un componente solo por su ID (para recuperar pedidos)
- // ... (resto de métodos anteriores) ...
-
-    // NUEVO: Buscar un componente solo por su ID
+    // MÉTODO 2: Buscar un componente solo por su ID (para recuperar pedidos al editar)
     public Componente obtenerComponentePorId(int id) {
         BaseDatos bd = new BaseDatos();
         Connection con = bd.getConn();
@@ -123,11 +116,12 @@ public class ComponenteDAO {
 
             if (rs.next()) {
                 // Creamos un componente genérico con los datos básicos
+                // Esto es suficiente para llenar el carrito visualmente
                 comp = new Componente(
                     rs.getInt("ID_COMPONENTE"),
                     rs.getString("DESCRIPCION"),
                     rs.getString("NOMBRE"),
-                    null, 
+                    null, // imagen (si no la usas)
                     rs.getInt("STOCK"),
                     rs.getInt("ID_MARCA"),
                     rs.getDouble("PRECIO_VENTA")

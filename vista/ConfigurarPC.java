@@ -15,19 +15,56 @@ public class ConfigurarPC extends JFrame {
     private JCheckBox chkMontaje;
     private JTextArea txtResumen;
     
-    // Arrays para guardar los desplegables y poder leerlos luego
     private JComboBox<Componente>[] combosComponentes;
     
     private Cliente clienteActual;
     private ComponenteDAO componenteDAO;
     private double precioTotalCalculado = 0.0;
-    private final double PRECIO_MONTAJE = 50.0; // Precio del servicio
+    private final double PRECIO_MONTAJE = 50.0;
 
+    // --- CONSTRUCTOR 1: NUEVA CONFIGURACIÓN ---
     public ConfigurarPC(Cliente cliente) {
         this.clienteActual = cliente;
         this.componenteDAO = new ComponenteDAO();
+        inicializarVentana(); // Dibuja la pantalla vacía
+    }
+
+    // --- CONSTRUCTOR 2: EDITAR CONFIGURACIÓN ---
+    public ConfigurarPC(Cliente cliente, List<LineaPedido> componentesViejos, boolean teniaMontaje) {
+        this(cliente); // Dibuja la pantalla primero
         
-        setTitle("Configurador de PC a Medida - Cliente: " + cliente.getNombre());
+        // 1. Restaurar el Checkbox de montaje
+        chkMontaje.setSelected(teniaMontaje);
+        
+        // 2. Restaurar los componentes en los desplegables
+        for (LineaPedido linea : componentesViejos) {
+            // Buscamos qué componente era por su ID
+            // Nota: No hace falta llamar a BD si recorremos los combos que ya tienen los datos cargados,
+            // pero usar el ID es más seguro.
+            seleccionarEnCombo(linea.getIdComponente());
+        }
+        
+        // 3. Recalcular el precio final para que salga actualizado
+        calcularPrecioTotal();
+    }
+
+    // Método auxiliar para buscar un ID en todos los combos y seleccionarlo
+    private void seleccionarEnCombo(int idComponenteBuscado) {
+        // Recorremos los 7 desplegables (Procesador, Placa, RAM...)
+        for (JComboBox<Componente> combo : combosComponentes) {
+            // Recorremos los items dentro de ese desplegable
+            for (int i = 0; i < combo.getItemCount(); i++) {
+                Componente c = combo.getItemAt(i);
+                if (c != null && c.getIdComponente() == idComponenteBuscado) {
+                    combo.setSelectedIndex(i); // ¡Lo encontramos! Lo seleccionamos.
+                    return; // Pasamos al siguiente producto del pedido
+                }
+            }
+        }
+    }
+
+    private void inicializarVentana() {
+        setTitle("Configurador de PC a Medida - Cliente: " + clienteActual.getNombre());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1100, 700);
         contentPane = new JPanel();
@@ -35,28 +72,24 @@ public class ConfigurarPC extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        // --- PANEL IZQUIERDO: SELECCIÓN ---
+        // Panel Izquierdo
         JPanel panelSeleccion = new JPanel();
         panelSeleccion.setBorder(new TitledBorder("Elige tus componentes"));
         panelSeleccion.setBounds(10, 10, 650, 600);
         panelSeleccion.setLayout(null);
         contentPane.add(panelSeleccion);
 
-        // Las partes ESENCIALES de un PC
         String[] etiquetas = {
             "1. Procesador:", "2. Placa Base:", "3. Memoria RAM:", 
             "4. Gráfica:", "5. Disco Duro:", "6. Caja/Torre:", "7. Fuente Alim.:"
         };
         
-        // Tablas de base de datos correspondientes (CON GUIONES BAJOS)
         String[] tablasBD = {
             "PROCESADOR", "PLACA_BASE", "RAM", 
             "TARJETA_GRAFICA", "DISCO_DURO", "CAJA", "FUENTE_ALIMENTACION"
         };
 
-        // Inicializamos el array de combos
         combosComponentes = new JComboBox[etiquetas.length];
-        
         int yPos = 30;
 
         for (int i = 0; i < etiquetas.length; i++) {
@@ -65,27 +98,19 @@ public class ConfigurarPC extends JFrame {
             lbl.setBounds(20, yPos, 120, 20);
             panelSeleccion.add(lbl);
 
-            // Crear Combo
             combosComponentes[i] = new JComboBox<>();
             combosComponentes[i].setBounds(150, yPos, 450, 25);
-            
-            // Añadir opción vacía al principio
             combosComponentes[i].addItem(null); 
             
-            // Cargar datos de BD
             List<Componente> lista = componenteDAO.obtenerComponentes(tablasBD[i]);
-            for (Componente c : lista) {
-                combosComponentes[i].addItem(c);
-            }
+            for (Componente c : lista) combosComponentes[i].addItem(c);
             
-            // Acción: Al seleccionar algo, recalcular el precio
             combosComponentes[i].addActionListener(e -> calcularPrecioTotal());
             
             panelSeleccion.add(combosComponentes[i]);
             yPos += 50;
         }
 
-        // Checkbox de Montaje
         chkMontaje = new JCheckBox("Quiero que me lo envíen montado y testeado (+50.00€)");
         chkMontaje.setFont(new Font("Tahoma", Font.BOLD, 13));
         chkMontaje.setForeground(new Color(0, 102, 204));
@@ -101,7 +126,7 @@ public class ConfigurarPC extends JFrame {
         });
         panelSeleccion.add(btnVolver);
 
-        // --- PANEL DERECHO: RESUMEN ---
+        // Panel Derecho
         JPanel panelResumen = new JPanel();
         panelResumen.setBorder(new TitledBorder("Resumen de Configuración"));
         panelResumen.setBounds(680, 10, 380, 600);
@@ -123,13 +148,12 @@ public class ConfigurarPC extends JFrame {
         
         JButton btnComprar = new JButton("COMPRAR PC");
         btnComprar.setFont(new Font("Tahoma", Font.BOLD, 16));
-        btnComprar.setBackground(new Color(50, 205, 50)); // Verde
+        btnComprar.setBackground(new Color(50, 205, 50)); 
         btnComprar.setBounds(90, 550, 200, 40);
         btnComprar.addActionListener(e -> finalizarCompra());
         panelResumen.add(btnComprar);
     }
 
-    // Método que recorre todos los combos para sumar precios y actualizar texto
     private void calcularPrecioTotal() {
         double total = 0.0;
         StringBuilder sb = new StringBuilder();
@@ -139,7 +163,6 @@ public class ConfigurarPC extends JFrame {
             Componente c = (Componente) combo.getSelectedItem();
             if (c != null) {
                 total += c.getPrecioVenta();
-                // Escribimos nombre corto y precio
                 sb.append("• ").append(c.getNombre()).append("\n");
                 sb.append("   ").append(c.getPrecioVenta()).append("€\n\n");
             }
@@ -157,40 +180,32 @@ public class ConfigurarPC extends JFrame {
     }
 
     private void finalizarCompra() {
-        // 1. Validar que ha elegido todos los componentes
         for (JComboBox<Componente> combo : combosComponentes) {
             if (combo.getSelectedItem() == null) {
-                JOptionPane.showMessageDialog(this, "Por favor, selecciona todos los componentes para completar el PC.");
+                JOptionPane.showMessageDialog(this, "Por favor, selecciona todos los componentes.");
                 return;
             }
         }
 
-        // 2. Crear lista de pedido y validar stock individual
         List<LineaPedido> carrito = new ArrayList<>();
-        
         for (JComboBox<Componente> combo : combosComponentes) {
             Componente c = (Componente) combo.getSelectedItem();
-            
-            // Validar Stock
             if (c.getStock() < 1) {
-                JOptionPane.showMessageDialog(this, "¡Lo sentimos! No hay stock de: " + c.getNombre());
+                JOptionPane.showMessageDialog(this, "No hay stock de: " + c.getNombre());
                 return;
             }
-            
             carrito.add(new LineaPedido(c.getIdComponente(), 1, c.getPrecioVenta()));
         }
 
-        // 3. Guardar en BD
         PedidoDAO pedidoDao = new PedidoDAO();
-        // Pasamos 'true' o 'false' según el checkbox de montaje
         boolean exito = pedidoDao.registrarPedido(clienteActual, carrito, precioTotalCalculado, chkMontaje.isSelected());
 
         if (exito) {
-            JOptionPane.showMessageDialog(this, "¡PC Configurado y Comprado con éxito!");
+            JOptionPane.showMessageDialog(this, "¡Pedido guardado!");
             this.dispose();
             new MenuCompras(clienteActual).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(this, "Hubo un error al guardar el pedido.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Hubo un error al guardar.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
