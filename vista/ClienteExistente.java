@@ -2,6 +2,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
@@ -18,6 +20,8 @@ public class ClienteExistente extends JFrame {
 	private JButton btnComprobarUsuario;
 
 	public ClienteExistente() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("imagenes\\logo.jpg"));
+
 		setTitle("ClienteExistente");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

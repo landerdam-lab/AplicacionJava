@@ -4,6 +4,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 public class PedidosImpagados extends JFrame {
 
@@ -15,6 +16,7 @@ public class PedidosImpagados extends JFrame {
 	private JButton btnRefrescar;
 
 	public PedidosImpagados() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("imagenes\\logo.jpg"));
 		setTitle("Listado de Morosos (Solo Pedidos)");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 500); 

@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -63,6 +64,8 @@ public class Login extends JFrame {
      * Create the frame.
      */
     public Login() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("imagenes\\logo.jpg"));
+
         setBackground(new Color(255, 0, 0));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(700, 300, 450, 300);

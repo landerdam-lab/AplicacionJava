@@ -1,9 +1,11 @@
+
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Font;
-import java.awt.Color; 
+import java.awt.Color;
 
 
 public class MenuCompras extends JFrame {
@@ -15,20 +17,26 @@ public class MenuCompras extends JFrame {
 	private JButton btnConfiguraciones;
 	private JButton btnComponentes; 
 	private JButton btnCargar;
-	private JButton btnImpagos; 
+	private JButton btnImpagos;
+	private JButton btnVolver; // <--- NUEVO BOTÓN
+
 	public MenuCompras(Cliente cliente) {
-		
 		this.clienteActual = cliente;
 		
 		setTitle("Menu Compras - Usuario: " + clienteActual.getNombre());
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(700, 300, 913, 600);
+		
+		// Si usas la clase Herramientas para el logo:
+		// Herramientas.cargarLogo(this);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		// --- BOTONES EXISTENTES ---
 		btnComponentes = new JButton("Comprar Componentes");
 		btnComponentes.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnComponentes.setBounds(294, 40, 309, 86);
@@ -44,38 +52,37 @@ public class MenuCompras extends JFrame {
 		btnCargar.setBounds(294, 260, 309, 86);
 		contentPane.add(btnCargar);
 		
-		btnImpagos = new JButton("ADMIN: Ver Impagos (Oracle Cursor)");
+		btnImpagos = new JButton("ADMIN: Ver Impagos");
 		btnImpagos.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnImpagos.setForeground(Color.RED); 
+		btnImpagos.setForeground(Color.RED);
 		btnImpagos.setBounds(294, 400, 309, 60);
 		contentPane.add(btnImpagos);
 		
+		// --- NUEVO BOTÓN VOLVER ---
+		btnVolver = new JButton("Cerrar Sesión");
+		btnVolver.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btnVolver.setForeground(Color.BLUE);
+		// Lo colocamos abajo a la izquierda
+		btnVolver.setBounds(20, 500, 150, 40);
+		contentPane.add(btnVolver);
+		
+		// --- CONTROLADOR ---
 		EventosMenuCompras controller = new EventosMenuCompras(this);
 		
 		btnComponentes.addActionListener(controller);
 		btnConfiguraciones.addActionListener(controller);
 		btnCargar.addActionListener(controller);
-		btnImpagos.addActionListener(controller); 
+		btnImpagos.addActionListener(controller);
+		btnVolver.addActionListener(controller); // <--- Escuchar botón
 	}
 	
+	// --- GETTERS ---
+	public Cliente getClienteActual() { return clienteActual; }
+	public JButton getBtnComponentes() { return btnComponentes; }
+	public JButton getBtnConfiguraciones() { return btnConfiguraciones; }
+	public JButton getBtnCargarPedidos() { return btnCargar; }
+	public JButton getBtnImpagos() { return btnImpagos; }
 	
-	public Cliente getClienteActual() {
-		return clienteActual;
-	}
-	
-	public JButton getBtnComponentes() {
-		return btnComponentes;
-	}
-
-	public JButton getBtnConfiguraciones() {
-		return btnConfiguraciones;
-	}
-
-	public JButton getBtnCargarPedidos() {
-		return btnCargar;
-	}
-	
-	public JButton getBtnImpagos() {
-		return btnImpagos;
-	}
+	// Getter Nuevo
+	public JButton getBtnVolver() { return btnVolver; }
 }

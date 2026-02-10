@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
+
 public class EventosMenuCompras implements ActionListener {
 
     private MenuCompras menuCompras;
@@ -14,25 +15,32 @@ public class EventosMenuCompras implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        // ... tus otros botones (Componentes, Configurar, Pedidos, Impagos) ...
         if (e.getSource() == menuCompras.getBtnComponentes()) {
             menuCompras.dispose();
             new CompraComponentes(menuCompras.getClienteActual()).setVisible(true);
         }
-
         else if (e.getSource() == menuCompras.getBtnConfiguraciones()) {
             menuCompras.dispose(); 
             ConfigurarPC ventana = new ConfigurarPC(menuCompras.getClienteActual());
             ventana.setVisible(true);
         }
-
         else if (e.getSource() == menuCompras.getBtnCargarPedidos()) {
             menuCompras.dispose();
             MisPedidos ventana = new MisPedidos(menuCompras.getClienteActual());
             ventana.setVisible(true);
         }
-        
         else if (e.getSource() == menuCompras.getBtnImpagos()) {
             new PedidosImpagados().setVisible(true);
+        }
+
+        // --- BOTÓN VOLVER: AHORA VA A 'ClientesInicio' ---
+        else if (e.getSource() == menuCompras.getBtnVolver()) {
+            menuCompras.dispose(); 
+            
+            // Ahora esto funcionará aunque sea null
+            ClientesInicio inicio = new ClientesInicio(null); 
+            inicio.setVisible(true);
         }
     }
 }

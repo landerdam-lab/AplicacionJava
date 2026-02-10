@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.util.List;
 
 public class ConfigurarPC extends JFrame {
@@ -32,6 +33,8 @@ public class ConfigurarPC extends JFrame {
 	}
 
 	private void inicializarVentana() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("imagenes\\logo.jpg"));
+
 		setTitle("Configurador PC - " + clienteActual.getNombre());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(700, 300, 1100, 700);

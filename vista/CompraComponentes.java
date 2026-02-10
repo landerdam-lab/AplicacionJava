@@ -3,6 +3,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.Color;
 import java.util.List; 
 import java.awt.Dimension;
@@ -28,6 +29,8 @@ public class CompraComponentes extends JFrame {
 	private EventosCompraComponentes controller;
 
 	public CompraComponentes(Cliente cliente) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("imagenes\\logo.jpg"));
+
 		this.clienteActual = cliente;
 		this.controller = new EventosCompraComponentes(this);
 		inicializarVentana();

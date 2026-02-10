@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,6 +26,8 @@ public class ClientesRegistro extends JFrame {
 
 
 	public ClientesRegistro(ClientesInicio clientesInicio) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("imagenes\\logo.jpg"));
+
 		setTitle("Registro de Cliente");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(700, 300, 450, 300);

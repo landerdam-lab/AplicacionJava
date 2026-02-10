@@ -1,8 +1,8 @@
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.Color;
 
 public class MisPedidos extends JFrame {
@@ -21,6 +21,7 @@ public class MisPedidos extends JFrame {
 
 	public MisPedidos(Cliente cliente) {
 		this.clienteActual = cliente;
+		setIconImage(Toolkit.getDefaultToolkit().getImage("imagenes\\logo.jpg"));
 
 		setTitle("Historial de Pedidos - Cliente: " + cliente.getNombre());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
